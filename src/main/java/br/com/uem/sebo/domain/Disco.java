@@ -3,7 +3,6 @@ package br.com.uem.sebo.domain;
 import br.com.uem.sebo.domain.enumeration.TipoMidia;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import java.io.Serializable;
 
 /**
  * A Disco.
@@ -11,7 +10,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "disco")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Disco implements Serializable {
+public class Disco extends Item {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,7 +69,8 @@ public class Disco implements Serializable {
         this.duracaoMinutos = duracaoMinutos;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -85,7 +85,8 @@ public class Disco implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -93,9 +94,9 @@ public class Disco implements Serializable {
     @Override
     public String toString() {
         return "Disco{" +
-            "id=" + getId() +
-            ", tipoMidia='" + getTipoMidia() + "'" +
-            ", duracaoMinutos=" + getDuracaoMinutos() +
-            "}";
+                "id=" + getId() +
+                ", tipoMidia='" + getTipoMidia() + "'" +
+                ", duracaoMinutos=" + getDuracaoMinutos() +
+                "}";
     }
 }

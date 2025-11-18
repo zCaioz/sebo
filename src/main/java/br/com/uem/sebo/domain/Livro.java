@@ -2,7 +2,6 @@ package br.com.uem.sebo.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import java.io.Serializable;
 
 /**
  * A Livro.
@@ -10,7 +9,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "livro")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Livro implements Serializable {
+public class Livro extends Item {
 
     private static final long serialVersionUID = 1L;
 
@@ -84,7 +83,8 @@ public class Livro implements Serializable {
         this.numeroPaginas = numeroPaginas;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -99,7 +99,8 @@ public class Livro implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -107,10 +108,10 @@ public class Livro implements Serializable {
     @Override
     public String toString() {
         return "Livro{" +
-            "id=" + getId() +
-            ", isbn='" + getIsbn() + "'" +
-            ", editora='" + getEditora() + "'" +
-            ", numeroPaginas=" + getNumeroPaginas() +
-            "}";
+                "id=" + getId() +
+                ", isbn='" + getIsbn() + "'" +
+                ", editora='" + getEditora() + "'" +
+                ", numeroPaginas=" + getNumeroPaginas() +
+                "}";
     }
 }

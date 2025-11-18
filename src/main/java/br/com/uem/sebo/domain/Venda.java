@@ -2,7 +2,6 @@ package br.com.uem.sebo.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -12,7 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "venda")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Venda implements Serializable {
+public class Venda extends AbstractAuditingEntity<Long> {
 
     private static final long serialVersionUID = 1L;
 
@@ -103,7 +102,8 @@ public class Venda implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -118,7 +118,8 @@ public class Venda implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -126,9 +127,9 @@ public class Venda implements Serializable {
     @Override
     public String toString() {
         return "Venda{" +
-            "id=" + getId() +
-            ", dataVenda='" + getDataVenda() + "'" +
-            ", valor=" + getValor() +
-            "}";
+                "id=" + getId() +
+                ", dataVenda='" + getDataVenda() + "'" +
+                ", valor=" + getValor() +
+                "}";
     }
 }

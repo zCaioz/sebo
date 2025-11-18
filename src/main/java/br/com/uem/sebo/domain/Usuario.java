@@ -2,7 +2,6 @@ package br.com.uem.sebo.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import java.io.Serializable;
 
 /**
  * A Usuario.
@@ -10,7 +9,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "usuario")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Usuario implements Serializable {
+public class Usuario extends AbstractAuditingEntity<Long> {
 
     private static final long serialVersionUID = 1L;
 
@@ -85,7 +84,8 @@ public class Usuario implements Serializable {
         this.telefone = telefone;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -100,7 +100,8 @@ public class Usuario implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -108,10 +109,10 @@ public class Usuario implements Serializable {
     @Override
     public String toString() {
         return "Usuario{" +
-            "id=" + getId() +
-            ", nome='" + getNome() + "'" +
-            ", email='" + getEmail() + "'" +
-            ", telefone='" + getTelefone() + "'" +
-            "}";
+                "id=" + getId() +
+                ", nome='" + getNome() + "'" +
+                ", email='" + getEmail() + "'" +
+                ", telefone='" + getTelefone() + "'" +
+                "}";
     }
 }
