@@ -1,0 +1,44 @@
+{
+  "annotations": {
+    "changelogDate": "20251118234317"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "dataEmprestimo",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dataPrevistaDevolucao",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dataDevolucao",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "StatusEmprestimo",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EM_ANDAMENTO,DEVOLVIDO,ATRASADO"
+    }
+  ],
+  "name": "Emprestimo",
+  "relationships": [
+    {
+      "otherEntityName": "item",
+      "relationshipName": "item",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "usuario",
+      "relationshipName": "usuario",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}

@@ -1,0 +1,33 @@
+{
+  "annotations": {
+    "changelogDate": "20251118234313"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "titulo",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "ano",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "genero",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "autorArtista",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "disponibilidade",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Item",
+  "relationships": [],
+  "searchEngine": "no"
+}

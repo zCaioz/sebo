@@ -1,0 +1,89 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-item-heading" data-cy="ItemCreateUpdateHeading">Criar ou editar Item</h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let tituloRef = editForm.get('titulo')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_titulo">Titulo</label>
+          <input type="text" class="form-control" name="titulo" id="field_titulo" data-cy="titulo" formControlName="titulo" />
+          @if (tituloRef.invalid && (tituloRef.dirty || tituloRef.touched)) {
+            <div>
+              @if (editForm.get('titulo')?.errors?.required) {
+                <small class="form-text text-danger">O campo é obrigatório.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_ano">Ano</label>
+          <input type="number" class="form-control" name="ano" id="field_ano" data-cy="ano" formControlName="ano" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_genero">Genero</label>
+          <input type="text" class="form-control" name="genero" id="field_genero" data-cy="genero" formControlName="genero" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_autorArtista">Autor Artista</label>
+          <input
+            type="text"
+            class="form-control"
+            name="autorArtista"
+            id="field_autorArtista"
+            data-cy="autorArtista"
+            formControlName="autorArtista"
+          />
+        </div>
+
+        @let disponibilidadeRef = editForm.get('disponibilidade')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_disponibilidade">Disponibilidade</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="disponibilidade"
+            id="field_disponibilidade"
+            data-cy="disponibilidade"
+            formControlName="disponibilidade"
+          />
+          @if (disponibilidadeRef.invalid && (disponibilidadeRef.dirty || disponibilidadeRef.touched)) {
+            <div>
+              @if (editForm.get('disponibilidade')?.errors?.required) {
+                <small class="form-text text-danger">O campo é obrigatório.</small>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancelar</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Salvar</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

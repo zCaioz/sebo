@@ -1,0 +1,38 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (disco(); as discoRef) {
+      <div>
+        <h2 data-cy="discoDetailsHeading"><span>Disco</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>Código</span></dt>
+          <dd>
+            <span>{{ discoRef.id }}</span>
+          </dd>
+          <dt><span>Tipo Midia</span></dt>
+          <dd>
+            <span>{{ { null: '', VINIL: 'VINIL', CD: 'CD', DVD: 'DVD' }[discoRef.tipoMidia ?? 'null'] }}</span>
+          </dd>
+          <dt><span>Duracao Minutos</span></dt>
+          <dd>
+            <span>{{ discoRef.duracaoMinutos }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Voltar</span>
+        </button>
+
+        <button type="button" [routerLink]="['/disco', discoRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

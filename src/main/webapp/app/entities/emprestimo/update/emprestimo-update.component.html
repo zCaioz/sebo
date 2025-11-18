@@ -1,0 +1,154 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-emprestimo-heading" data-cy="EmprestimoCreateUpdateHeading">Criar ou editar Emprestimo</h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let dataEmprestimoRef = editForm.get('dataEmprestimo')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dataEmprestimo">Data Emprestimo</label>
+          <div class="input-group">
+            <input
+              id="field_dataEmprestimo"
+              data-cy="dataEmprestimo"
+              type="text"
+              class="form-control"
+              name="dataEmprestimo"
+              ngbDatepicker
+              #dataEmprestimoDp="ngbDatepicker"
+              formControlName="dataEmprestimo"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dataEmprestimoDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (dataEmprestimoRef.invalid && (dataEmprestimoRef.dirty || dataEmprestimoRef.touched)) {
+            <div>
+              @if (editForm.get('dataEmprestimo')?.errors?.required) {
+                <small class="form-text text-danger">O campo é obrigatório.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let dataPrevistaDevolucaoRef = editForm.get('dataPrevistaDevolucao')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dataPrevistaDevolucao">Data Prevista Devolucao</label>
+          <div class="input-group">
+            <input
+              id="field_dataPrevistaDevolucao"
+              data-cy="dataPrevistaDevolucao"
+              type="text"
+              class="form-control"
+              name="dataPrevistaDevolucao"
+              ngbDatepicker
+              #dataPrevistaDevolucaoDp="ngbDatepicker"
+              formControlName="dataPrevistaDevolucao"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dataPrevistaDevolucaoDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (dataPrevistaDevolucaoRef.invalid && (dataPrevistaDevolucaoRef.dirty || dataPrevistaDevolucaoRef.touched)) {
+            <div>
+              @if (editForm.get('dataPrevistaDevolucao')?.errors?.required) {
+                <small class="form-text text-danger">O campo é obrigatório.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dataDevolucao">Data Devolucao</label>
+          <div class="input-group">
+            <input
+              id="field_dataDevolucao"
+              data-cy="dataDevolucao"
+              type="text"
+              class="form-control"
+              name="dataDevolucao"
+              ngbDatepicker
+              #dataDevolucaoDp="ngbDatepicker"
+              formControlName="dataDevolucao"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dataDevolucaoDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        @let statusRef = editForm.get('status')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_status">Status</label>
+          <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
+            <option [ngValue]="null"></option>
+            @for (statusEmprestimo of statusEmprestimoValues; track $index) {
+              <option [value]="statusEmprestimo">
+                {{ { null: '', EM_ANDAMENTO: 'EM_ANDAMENTO', DEVOLVIDO: 'DEVOLVIDO', ATRASADO: 'ATRASADO' }[statusEmprestimo] }}
+              </option>
+            }
+          </select>
+          @if (statusRef.invalid && (statusRef.dirty || statusRef.touched)) {
+            <div>
+              @if (editForm.get('status')?.errors?.required) {
+                <small class="form-text text-danger">O campo é obrigatório.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_item">Item</label>
+          <select class="form-control" id="field_item" data-cy="item" name="item" formControlName="item" [compareWith]="compareItem">
+            <option [ngValue]="null"></option>
+            @for (itemOption of itemsSharedCollection; track $index) {
+              <option [ngValue]="itemOption">{{ itemOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_usuario">Usuario</label>
+          <select
+            class="form-control"
+            id="field_usuario"
+            data-cy="usuario"
+            name="usuario"
+            formControlName="usuario"
+            [compareWith]="compareUsuario"
+          >
+            <option [ngValue]="null"></option>
+            @for (usuarioOption of usuariosSharedCollection; track $index) {
+              <option [ngValue]="usuarioOption">{{ usuarioOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancelar</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Salvar</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

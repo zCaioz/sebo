@@ -1,0 +1,21 @@
+{
+  "annotations": {
+    "changelogDate": "20251118234315"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "tipoMidia",
+      "fieldType": "TipoMidia",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "VINIL,CD,DVD"
+    },
+    {
+      "fieldName": "duracaoMinutos",
+      "fieldType": "Integer"
+    }
+  ],
+  "name": "Disco",
+  "relationships": [],
+  "searchEngine": "no"
+}

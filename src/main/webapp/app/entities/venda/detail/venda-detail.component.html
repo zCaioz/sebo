@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (venda(); as vendaRef) {
+      <div>
+        <h2 data-cy="vendaDetailsHeading"><span>Venda</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>Código</span></dt>
+          <dd>
+            <span>{{ vendaRef.id }}</span>
+          </dd>
+          <dt><span>Data Venda</span></dt>
+          <dd>
+            <span>{{ vendaRef.dataVenda | formatMediumDate }}</span>
+          </dd>
+          <dt><span>Valor</span></dt>
+          <dd>
+            <span>{{ vendaRef.valor }}</span>
+          </dd>
+          <dt><span>Item</span></dt>
+          <dd>
+            @if (venda()!.item) {
+              <div>
+                <a [routerLink]="['/item', venda()!.item?.id, 'view']">{{ vendaRef.item?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span>Usuario</span></dt>
+          <dd>
+            @if (venda()!.usuario) {
+              <div>
+                <a [routerLink]="['/usuario', venda()!.usuario?.id, 'view']">{{ vendaRef.usuario?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Voltar</span>
+        </button>
+
+        <button type="button" [routerLink]="['/venda', vendaRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

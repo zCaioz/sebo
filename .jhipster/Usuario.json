@@ -1,0 +1,25 @@
+{
+  "annotations": {
+    "changelogDate": "20251118234316"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "nome",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "telefone",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Usuario",
+  "relationships": [],
+  "searchEngine": "no"
+}

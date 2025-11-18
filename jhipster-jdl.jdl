@@ -1,0 +1,69 @@
+// ============================
+// Enums
+// ============================
+enum TipoMidia {
+  VINIL, CD, DVD
+}
+
+enum StatusEmprestimo {
+  EM_ANDAMENTO,
+  DEVOLVIDO,
+  ATRASADO
+}
+
+// ============================
+// Entidades
+// ============================
+
+entity Item {
+  titulo String required,
+  ano Integer,
+  genero String,
+  autorArtista String,
+  disponibilidade Boolean required
+}
+
+entity Livro {
+  isbn String required,
+  editora String,
+  numeroPaginas Integer
+}
+
+entity Disco {
+  tipoMidia TipoMidia required,
+  duracaoMinutos Integer
+}
+
+entity Usuario {
+  nome String required,
+  email String required,
+  telefone String
+}
+
+entity Emprestimo {
+  dataEmprestimo LocalDate required,
+  dataPrevistaDevolucao LocalDate required,
+  dataDevolucao LocalDate,
+  status StatusEmprestimo required
+}
+
+entity Venda {
+  dataVenda LocalDate required,
+  valor BigDecimal required
+}
+
+// ============================
+// Relacionamentos
+// ============================
+
+// Emprestimo → Item e Usuario
+relationship ManyToOne {
+  Emprestimo{item} to Item,
+  Emprestimo{usuario} to Usuario
+}
+
+// Venda → Item e Usuario
+relationship ManyToOne {
+  Venda{item} to Item,
+  Venda{usuario} to Usuario
+}
