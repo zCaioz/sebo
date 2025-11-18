@@ -994,7 +994,8 @@
                 <!-- default Spring profiles -->
                 <liquibase-plugin.password/>
                 <liquibase-plugin.url>jdbc:postgresql://localhost:5432/sebo</liquibase-plugin.url>
-                <liquibase-plugin.username>sebo</liquibase-plugin.username>
+                <liquibase-plugin.username>root</liquibase-plugin.username>
+                <liquibase-plugin.password>12345678</liquibase-plugin.password>
                 <profile.test>test,testprod</profile.test>
                 <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}${profile.no-liquibase}</spring.profiles.active>
             </properties>
