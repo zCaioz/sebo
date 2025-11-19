@@ -13,12 +13,6 @@ public class Livro extends Item {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @Column(name = "id")
-    private Long id;
-
     @NotNull
     @Column(name = "isbn", nullable = false)
     private String isbn;
@@ -28,21 +22,6 @@ public class Livro extends Item {
 
     @Column(name = "numero_paginas")
     private Integer numeroPaginas;
-
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public Livro id(Long id) {
-        this.setId(id);
-        return this;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getIsbn() {
         return this.isbn;

@@ -33,7 +33,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/sebo
-    username: root
+    username: postgres
     password: 12345678
     hikari:
       poolName: Hikari

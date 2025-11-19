@@ -14,12 +14,6 @@ public class Disco extends Item {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @Column(name = "id")
-    private Long id;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_midia", nullable = false)
@@ -27,21 +21,6 @@ public class Disco extends Item {
 
     @Column(name = "duracao_minutos")
     private Integer duracaoMinutos;
-
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public Disco id(Long id) {
-        this.setId(id);
-        return this;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public TipoMidia getTipoMidia() {
         return this.tipoMidia;

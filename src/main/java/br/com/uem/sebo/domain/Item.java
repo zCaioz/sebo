@@ -10,7 +10,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "item")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Item extends AbstractAuditingEntity<Long> {
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Item implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -23,7 +23,7 @@
             The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version}
         -->
         <maven.version>3.2.5</maven.version>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <node.version>v22.15.0</node.version>
         <npm.version>11.3.0</npm.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -860,7 +860,8 @@
                 <!-- default Spring profiles -->
                 <liquibase-plugin.password/>
                 <liquibase-plugin.url>jdbc:postgresql://localhost:5432/sebo</liquibase-plugin.url>
-                <liquibase-plugin.username>sebo</liquibase-plugin.username>
+                <liquibase-plugin.username>postgres</liquibase-plugin.username>
+                <liquibase-plugin.password>12345678</liquibase-plugin.password>
                 <profile.test>test,testdev</profile.test>
                 <spring.profiles.active>dev${profile.tls}${profile.no-liquibase}</spring.profiles.active>
             </properties>
@@ -994,7 +995,7 @@
                 <!-- default Spring profiles -->
                 <liquibase-plugin.password/>
                 <liquibase-plugin.url>jdbc:postgresql://localhost:5432/sebo</liquibase-plugin.url>
-                <liquibase-plugin.username>root</liquibase-plugin.username>
+                <liquibase-plugin.username>postgres</liquibase-plugin.username>
                 <liquibase-plugin.password>12345678</liquibase-plugin.password>
                 <profile.test>test,testprod</profile.test>
                 <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}${profile.no-liquibase}</spring.profiles.active>
