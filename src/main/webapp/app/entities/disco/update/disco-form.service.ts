@@ -20,6 +20,12 @@ type DiscoFormGroupContent = {
   id: FormControl<IDisco['id'] | NewDisco['id']>;
   tipoMidia: FormControl<IDisco['tipoMidia']>;
   duracaoMinutos: FormControl<IDisco['duracaoMinutos']>;
+
+  titulo: FormControl<IDisco['titulo']>;
+  ano: FormControl<IDisco['ano']>;
+  genero: FormControl<IDisco['genero']>;
+  autorArtista: FormControl<IDisco['autorArtista']>;
+  disponibilidade: FormControl<IDisco['disponibilidade']>;
 };
 
 export type DiscoFormGroup = FormGroup<DiscoFormGroupContent>;
@@ -43,6 +49,12 @@ export class DiscoFormService {
         validators: [Validators.required],
       }),
       duracaoMinutos: new FormControl(discoRawValue.duracaoMinutos),
+
+      titulo: new FormControl(discoRawValue.titulo, { validators: [Validators.required] }),
+      ano: new FormControl(discoRawValue.ano),
+      genero: new FormControl(discoRawValue.genero),
+      autorArtista: new FormControl(discoRawValue.autorArtista),
+      disponibilidade: new FormControl(discoRawValue.disponibilidade ?? true, { validators: [Validators.required] }),
     });
   }
 
