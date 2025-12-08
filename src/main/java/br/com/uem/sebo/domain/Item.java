@@ -13,6 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "item")
 @SuppressWarnings("common-java:DuplicatedBlocks")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Item implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,7 +39,7 @@ public class Item implements Serializable {
 
     @NotNull
     @Column(name = "disponibilidade", nullable = false)
-    private Boolean disponibilidade;
+    private Boolean disponibilidade = true;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "itens")
     @JsonIgnoreProperties(value = { "usuario", "itens" }, allowSetters = true)
@@ -190,7 +191,8 @@ public class Item implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -205,7 +207,8 @@ public class Item implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -213,12 +216,12 @@ public class Item implements Serializable {
     @Override
     public String toString() {
         return "Item{" +
-            "id=" + getId() +
-            ", titulo='" + getTitulo() + "'" +
-            ", ano=" + getAno() +
-            ", genero='" + getGenero() + "'" +
-            ", autorArtista='" + getAutorArtista() + "'" +
-            ", disponibilidade='" + getDisponibilidade() + "'" +
-            "}";
+                "id=" + getId() +
+                ", titulo='" + getTitulo() + "'" +
+                ", ano=" + getAno() +
+                ", genero='" + getGenero() + "'" +
+                ", autorArtista='" + getAutorArtista() + "'" +
+                ", disponibilidade='" + getDisponibilidade() + "'" +
+                "}";
     }
 }

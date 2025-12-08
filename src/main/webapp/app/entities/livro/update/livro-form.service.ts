@@ -21,6 +21,11 @@ type LivroFormGroupContent = {
   isbn: FormControl<ILivro['isbn']>;
   editora: FormControl<ILivro['editora']>;
   numeroPaginas: FormControl<ILivro['numeroPaginas']>;
+  titulo: FormControl<ILivro['titulo']>;
+  ano: FormControl<ILivro['ano']>;
+  genero: FormControl<ILivro['genero']>;
+  autorArtista: FormControl<ILivro['autorArtista']>;
+  disponibilidade: FormControl<ILivro['disponibilidade']>;
 };
 
 export type LivroFormGroup = FormGroup<LivroFormGroupContent>;
@@ -45,6 +50,11 @@ export class LivroFormService {
       }),
       editora: new FormControl(livroRawValue.editora),
       numeroPaginas: new FormControl(livroRawValue.numeroPaginas),
+      titulo: new FormControl(livroRawValue.titulo, { validators: [Validators.required] }),
+      ano: new FormControl(livroRawValue.ano),
+      genero: new FormControl(livroRawValue.genero),
+      autorArtista: new FormControl(livroRawValue.autorArtista),
+      disponibilidade: new FormControl(livroRawValue.disponibilidade ?? true, { validators: [Validators.required] }),
     });
   }
 
