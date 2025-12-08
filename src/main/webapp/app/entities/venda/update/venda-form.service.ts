@@ -47,7 +47,7 @@ export class VendaFormService {
       valor: new FormControl(vendaRawValue.valor, {
         validators: [Validators.required],
       }),
-      usuario: new FormControl(vendaRawValue.usuario),
+      usuario: new FormControl(vendaRawValue.usuario, { validators: Validators.required }),
       itens: new FormControl(vendaRawValue.itens ?? []),
     });
   }

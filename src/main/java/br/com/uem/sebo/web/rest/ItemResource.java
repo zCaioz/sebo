@@ -44,7 +44,9 @@ public class ItemResource {
      * {@code POST  /items} : Create a new item.
      *
      * @param item the item to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new item, or with status {@code 400 (Bad Request)} if the item has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new item, or with status {@code 400 (Bad Request)} if the
+     *         item has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
@@ -62,11 +64,13 @@ public class ItemResource {
     /**
      * {@code PUT  /items/:id} : Updates an existing item.
      *
-     * @param id the id of the item to save.
+     * @param id   the id of the item to save.
      * @param item the item to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated item,
-     * or with status {@code 400 (Bad Request)} if the item is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the item couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated item,
+     *         or with status {@code 400 (Bad Request)} if the item is not valid,
+     *         or with status {@code 500 (Internal Server Error)} if the item
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
@@ -91,14 +95,17 @@ public class ItemResource {
     }
 
     /**
-     * {@code PATCH  /items/:id} : Partial updates given fields of an existing item, field will ignore if it is null
+     * {@code PATCH  /items/:id} : Partial updates given fields of an existing item,
+     * field will ignore if it is null
      *
-     * @param id the id of the item to save.
+     * @param id   the id of the item to save.
      * @param item the item to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated item,
-     * or with status {@code 400 (Bad Request)} if the item is not valid,
-     * or with status {@code 404 (Not Found)} if the item is not found,
-     * or with status {@code 500 (Internal Server Error)} if the item couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated item,
+     *         or with status {@code 400 (Bad Request)} if the item is not valid,
+     *         or with status {@code 404 (Not Found)} if the item is not found,
+     *         or with status {@code 500 (Internal Server Error)} if the item
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -150,11 +157,19 @@ public class ItemResource {
     /**
      * {@code GET  /items} : get all the items.
      *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of items in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of items in body.
      */
     @GetMapping("")
-    public List<Item> getAllItems() {
-        LOG.debug("REST request to get all Items");
+    public List<Item> getAllItems(
+        @RequestParam(name = "somenteDisponiveis", required = false, defaultValue = "false") boolean somenteDisponiveis
+    ) {
+        LOG.debug("REST request to get all Items (somenteDisponiveis = {})", somenteDisponiveis);
+
+        if (somenteDisponiveis) {
+            return itemRepository.findAllByDisponibilidadeIsTrue();
+        }
+
         return itemRepository.findAll();
     }
 
@@ -162,7 +177,8 @@ public class ItemResource {
      * {@code GET  /items/:id} : get the "id" item.
      *
      * @param id the id of the item to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the item, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the item, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     public ResponseEntity<Item> getItem(@PathVariable("id") Long id) {

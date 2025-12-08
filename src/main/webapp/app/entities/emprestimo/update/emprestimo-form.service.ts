@@ -53,7 +53,7 @@ export class EmprestimoFormService {
       status: new FormControl(emprestimoRawValue.status, {
         validators: [Validators.required],
       }),
-      usuario: new FormControl(emprestimoRawValue.usuario),
+      usuario: new FormControl(emprestimoRawValue.usuario, { validators: [Validators.required] }),
       itens: new FormControl(emprestimoRawValue.itens ?? []),
     });
   }

@@ -39,7 +39,7 @@ public class Item implements Serializable {
 
     @NotNull
     @Column(name = "disponibilidade", nullable = false)
-    private Boolean disponibilidade = true;
+    private Boolean disponibilidade;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "itens")
     @JsonIgnoreProperties(value = { "usuario", "itens" }, allowSetters = true)

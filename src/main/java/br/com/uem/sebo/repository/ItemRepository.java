@@ -1,6 +1,7 @@
 package br.com.uem.sebo.repository;
 
 import br.com.uem.sebo.domain.Item;
+import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ItemRepository extends JpaRepository<Item, Long> {}
+public interface ItemRepository extends JpaRepository<Item, Long> {
+    List<Item> findAllByDisponibilidadeIsTrue();
+}

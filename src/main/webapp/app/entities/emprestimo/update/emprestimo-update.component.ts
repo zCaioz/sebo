@@ -110,7 +110,7 @@ export class EmprestimoUpdateComponent implements OnInit {
       .subscribe((usuarios: IUsuario[]) => (this.usuariosSharedCollection = usuarios));
 
     this.itemService
-      .query()
+      .query({ somenteDisponiveis: true })
       .pipe(map((res: HttpResponse<IItem[]>) => res.body ?? []))
       .pipe(map((items: IItem[]) => this.itemService.addItemToCollectionIfMissing<IItem>(items, ...(this.emprestimo?.itens ?? []))))
       .subscribe((items: IItem[]) => (this.itemsSharedCollection = items));

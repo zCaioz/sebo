@@ -52,6 +52,7 @@
           }
         </div>
 
+        @let usuarioRef = editForm.get('usuario')!;
         <div class="mb-3">
           <label class="form-label" for="field_usuario">Usuario</label>
           <select
@@ -64,9 +65,17 @@
           >
             <option [ngValue]="null"></option>
             @for (usuarioOption of usuariosSharedCollection; track $index) {
-              <option [ngValue]="usuarioOption">{{ usuarioOption.id }}</option>
+              <option [ngValue]="usuarioOption">{{ usuarioOption.id + ' ' + usuarioOption.nome }}</option>
             }
           </select>
+
+          @if (usuarioRef.invalid && (usuarioRef.dirty || usuarioRef.touched)) {
+            <div>
+              @if (editForm.get('usuario')?.errors?.required) {
+                <small class="form-text text-danger">O campo é obrigatório.</small>
+              }
+            </div>
+          }
         </div>
 
         <div class="mb-3">
@@ -81,7 +90,7 @@
             [compareWith]="compareItem"
           >
             @for (itemOption of itemsSharedCollection; track $index) {
-              <option [ngValue]="itemOption">{{ itemOption.id }}</option>
+              <option [ngValue]="itemOption">{{ itemOption.id + ' ' + itemOption.titulo }}</option>
             }
           </select>
         </div>
