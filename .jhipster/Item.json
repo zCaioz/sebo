@@ -28,6 +28,21 @@
     }
   ],
   "name": "Item",
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityName": "emprestimo",
+      "otherEntityRelationshipName": "itens",
+      "relationshipName": "emprestimo",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "venda",
+      "otherEntityRelationshipName": "itens",
+      "relationshipName": "venda",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
   "searchEngine": "no"
 }

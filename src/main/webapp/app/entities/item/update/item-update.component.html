@@ -67,6 +67,33 @@
             </div>
           }
         </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_emprestimo">Emprestimo</label>
+          <select
+            class="form-control"
+            id="field_emprestimo"
+            data-cy="emprestimo"
+            name="emprestimo"
+            formControlName="emprestimo"
+            [compareWith]="compareEmprestimo"
+          >
+            <option [ngValue]="null"></option>
+            @for (emprestimoOption of emprestimosSharedCollection; track $index) {
+              <option [ngValue]="emprestimoOption">{{ emprestimoOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_venda">Venda</label>
+          <select class="form-control" id="field_venda" data-cy="venda" name="venda" formControlName="venda" [compareWith]="compareVenda">
+            <option [ngValue]="null"></option>
+            @for (vendaOption of vendasSharedCollection; track $index) {
+              <option [ngValue]="vendaOption">{{ vendaOption.id }}</option>
+            }
+          </select>
+        </div>
       </div>
 
       <div>

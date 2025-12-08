@@ -2,6 +2,7 @@ package br.com.uem.sebo.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import java.io.Serializable;
 
 /**
  * A Livro.
@@ -9,9 +10,15 @@ import jakarta.validation.constraints.*;
 @Entity
 @Table(name = "livro")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Livro extends Item {
+public class Livro implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    @Column(name = "id")
+    private Long id;
 
     @NotNull
     @Column(name = "isbn", nullable = false)
@@ -22,6 +29,21 @@ public class Livro extends Item {
 
     @Column(name = "numero_paginas")
     private Integer numeroPaginas;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public Livro id(Long id) {
+        this.setId(id);
+        return this;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getIsbn() {
         return this.isbn;
@@ -62,8 +84,7 @@ public class Livro extends Item {
         this.numeroPaginas = numeroPaginas;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -78,8 +99,7 @@ public class Livro extends Item {
 
     @Override
     public int hashCode() {
-        // see
-        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -87,10 +107,10 @@ public class Livro extends Item {
     @Override
     public String toString() {
         return "Livro{" +
-                "id=" + getId() +
-                ", isbn='" + getIsbn() + "'" +
-                ", editora='" + getEditora() + "'" +
-                ", numeroPaginas=" + getNumeroPaginas() +
-                "}";
+            "id=" + getId() +
+            ", isbn='" + getIsbn() + "'" +
+            ", editora='" + getEditora() + "'" +
+            ", numeroPaginas=" + getNumeroPaginas() +
+            "}";
     }
 }

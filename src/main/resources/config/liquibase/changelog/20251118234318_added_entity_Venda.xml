@@ -20,9 +20,6 @@
             <column name="valor" type="decimal(21,2)">
                 <constraints nullable="false" />
             </column>
-            <column name="item_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <column name="usuario_id" type="bigint">
                 <constraints nullable="true" />
             </column>

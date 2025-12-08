@@ -1,9 +1,13 @@
 package br.com.uem.sebo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Venda.
@@ -11,7 +15,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "venda")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Venda extends AbstractAuditingEntity<Long> {
+public class Venda implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,10 +33,12 @@ public class Venda extends AbstractAuditingEntity<Long> {
     @Column(name = "valor", precision = 21, scale = 2, nullable = false)
     private BigDecimal valor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Item item;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "venda")
+    @JsonIgnoreProperties(value = { "emprestimo", "venda" }, allowSetters = true)
+    private Set<Item> itens = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "emprestimos", "vendas" }, allowSetters = true)
     private Usuario usuario;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -76,16 +82,34 @@ public class Venda extends AbstractAuditingEntity<Long> {
         this.valor = valor;
     }
 
-    public Item getItem() {
-        return this.item;
+    public Set<Item> getItens() {
+        return this.itens;
     }
 
-    public void setItem(Item item) {
-        this.item = item;
+    public void setItens(Set<Item> items) {
+        if (this.itens != null) {
+            this.itens.forEach(i -> i.setVenda(null));
+        }
+        if (items != null) {
+            items.forEach(i -> i.setVenda(this));
+        }
+        this.itens = items;
     }
 
-    public Venda item(Item item) {
-        this.setItem(item);
+    public Venda itens(Set<Item> items) {
+        this.setItens(items);
+        return this;
+    }
+
+    public Venda addItens(Item item) {
+        this.itens.add(item);
+        item.setVenda(this);
+        return this;
+    }
+
+    public Venda removeItens(Item item) {
+        this.itens.remove(item);
+        item.setVenda(null);
         return this;
     }
 
@@ -102,8 +126,7 @@ public class Venda extends AbstractAuditingEntity<Long> {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -118,8 +141,7 @@ public class Venda extends AbstractAuditingEntity<Long> {
 
     @Override
     public int hashCode() {
-        // see
-        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -127,9 +149,9 @@ public class Venda extends AbstractAuditingEntity<Long> {
     @Override
     public String toString() {
         return "Venda{" +
-                "id=" + getId() +
-                ", dataVenda='" + getDataVenda() + "'" +
-                ", valor=" + getValor() +
-                "}";
+            "id=" + getId() +
+            ", dataVenda='" + getDataVenda() + "'" +
+            ", valor=" + getValor() +
+            "}";
     }
 }

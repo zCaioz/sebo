@@ -68,12 +68,6 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <th scope="col" jhiSortBy="item.id">
-              <div class="d-flex">
-                <span>Item</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
             <th scope="col" jhiSortBy="usuario.id">
               <div class="d-flex">
                 <span>Usuario</span>
@@ -94,13 +88,6 @@
               <td>{{ emprestimo.dataDevolucao | formatMediumDate }}</td>
               <td>
                 {{ { null: '', EM_ANDAMENTO: 'EM_ANDAMENTO', DEVOLVIDO: 'DEVOLVIDO', ATRASADO: 'ATRASADO' }[emprestimo.status ?? 'null'] }}
-              </td>
-              <td>
-                @if (emprestimo.item) {
-                  <div>
-                    <a [routerLink]="['/item', emprestimo.item.id, 'view']">{{ emprestimo.item.id }}</a>
-                  </div>
-                }
               </td>
               <td>
                 @if (emprestimo.usuario) {

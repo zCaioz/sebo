@@ -75,6 +75,18 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="emprestimo.id">
+              <div class="d-flex">
+                <span>Emprestimo</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="venda.id">
+              <div class="d-flex">
+                <span>Venda</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -89,6 +101,20 @@
               <td>{{ item.genero }}</td>
               <td>{{ item.autorArtista }}</td>
               <td>{{ item.disponibilidade }}</td>
+              <td>
+                @if (item.emprestimo) {
+                  <div>
+                    <a [routerLink]="['/emprestimo', item.emprestimo.id, 'view']">{{ item.emprestimo.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (item.venda) {
+                  <div>
+                    <a [routerLink]="['/venda', item.venda.id, 'view']">{{ item.venda.id }}</a>
+                  </div>
+                }
+              </td>
               <td class="text-end">
                 <div class="btn-group">
                   <a [routerLink]="['/item', item.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">

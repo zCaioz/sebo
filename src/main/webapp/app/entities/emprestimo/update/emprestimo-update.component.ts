@@ -7,8 +7,6 @@ import { finalize, map } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IItem } from 'app/entities/item/item.model';
-import { ItemService } from 'app/entities/item/service/item.service';
 import { IUsuario } from 'app/entities/usuario/usuario.model';
 import { UsuarioService } from 'app/entities/usuario/service/usuario.service';
 import { StatusEmprestimo } from 'app/entities/enumerations/status-emprestimo.model';
@@ -26,19 +24,15 @@ export class EmprestimoUpdateComponent implements OnInit {
   emprestimo: IEmprestimo | null = null;
   statusEmprestimoValues = Object.keys(StatusEmprestimo);
 
-  itemsSharedCollection: IItem[] = [];
   usuariosSharedCollection: IUsuario[] = [];
 
   protected emprestimoService = inject(EmprestimoService);
   protected emprestimoFormService = inject(EmprestimoFormService);
-  protected itemService = inject(ItemService);
   protected usuarioService = inject(UsuarioService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: EmprestimoFormGroup = this.emprestimoFormService.createEmprestimoFormGroup();
-
-  compareItem = (o1: IItem | null, o2: IItem | null): boolean => this.itemService.compareItem(o1, o2);
 
   compareUsuario = (o1: IUsuario | null, o2: IUsuario | null): boolean => this.usuarioService.compareUsuario(o1, o2);
 
@@ -90,7 +84,6 @@ export class EmprestimoUpdateComponent implements OnInit {
     this.emprestimo = emprestimo;
     this.emprestimoFormService.resetForm(this.editForm, emprestimo);
 
-    this.itemsSharedCollection = this.itemService.addItemToCollectionIfMissing<IItem>(this.itemsSharedCollection, emprestimo.item);
     this.usuariosSharedCollection = this.usuarioService.addUsuarioToCollectionIfMissing<IUsuario>(
       this.usuariosSharedCollection,
       emprestimo.usuario,
@@ -98,12 +91,6 @@ export class EmprestimoUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
-    this.itemService
-      .query()
-      .pipe(map((res: HttpResponse<IItem[]>) => res.body ?? []))
-      .pipe(map((items: IItem[]) => this.itemService.addItemToCollectionIfMissing<IItem>(items, this.emprestimo?.item)))
-      .subscribe((items: IItem[]) => (this.itemsSharedCollection = items));
-
     this.usuarioService
       .query()
       .pipe(map((res: HttpResponse<IUsuario[]>) => res.body ?? []))

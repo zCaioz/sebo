@@ -35,6 +35,22 @@
           <dd>
             <span>{{ itemRef.disponibilidade }}</span>
           </dd>
+          <dt><span>Emprestimo</span></dt>
+          <dd>
+            @if (item()!.emprestimo) {
+              <div>
+                <a [routerLink]="['/emprestimo', item()!.emprestimo?.id, 'view']">{{ itemRef.emprestimo?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span>Venda</span></dt>
+          <dd>
+            @if (item()!.venda) {
+              <div>
+                <a [routerLink]="['/venda', item()!.venda?.id, 'view']">{{ itemRef.venda?.id }}</a>
+              </div>
+            }
+          </dd>
         </dl>
 
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

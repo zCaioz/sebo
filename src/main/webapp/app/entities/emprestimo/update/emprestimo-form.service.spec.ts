@@ -24,7 +24,6 @@ describe('Emprestimo Form Service', () => {
             dataPrevistaDevolucao: expect.any(Object),
             dataDevolucao: expect.any(Object),
             status: expect.any(Object),
-            item: expect.any(Object),
             usuario: expect.any(Object),
           }),
         );
@@ -40,7 +39,6 @@ describe('Emprestimo Form Service', () => {
             dataPrevistaDevolucao: expect.any(Object),
             dataDevolucao: expect.any(Object),
             status: expect.any(Object),
-            item: expect.any(Object),
             usuario: expect.any(Object),
           }),
         );

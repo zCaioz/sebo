@@ -2,13 +2,17 @@ import { Component, OnInit, inject } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IItem } from '../item.model';
+import { IEmprestimo } from 'app/entities/emprestimo/emprestimo.model';
+import { EmprestimoService } from 'app/entities/emprestimo/service/emprestimo.service';
+import { IVenda } from 'app/entities/venda/venda.model';
+import { VendaService } from 'app/entities/venda/service/venda.service';
 import { ItemService } from '../service/item.service';
+import { IItem } from '../item.model';
 import { ItemFormGroup, ItemFormService } from './item-form.service';
 
 @Component({
@@ -20,12 +24,21 @@ export class ItemUpdateComponent implements OnInit {
   isSaving = false;
   item: IItem | null = null;
 
+  emprestimosSharedCollection: IEmprestimo[] = [];
+  vendasSharedCollection: IVenda[] = [];
+
   protected itemService = inject(ItemService);
   protected itemFormService = inject(ItemFormService);
+  protected emprestimoService = inject(EmprestimoService);
+  protected vendaService = inject(VendaService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: ItemFormGroup = this.itemFormService.createItemFormGroup();
+
+  compareEmprestimo = (o1: IEmprestimo | null, o2: IEmprestimo | null): boolean => this.emprestimoService.compareEmprestimo(o1, o2);
+
+  compareVenda = (o1: IVenda | null, o2: IVenda | null): boolean => this.vendaService.compareVenda(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ item }) => {
@@ -33,6 +46,8 @@ export class ItemUpdateComponent implements OnInit {
       if (item) {
         this.updateForm(item);
       }
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -72,5 +87,29 @@ export class ItemUpdateComponent implements OnInit {
   protected updateForm(item: IItem): void {
     this.item = item;
     this.itemFormService.resetForm(this.editForm, item);
+
+    this.emprestimosSharedCollection = this.emprestimoService.addEmprestimoToCollectionIfMissing<IEmprestimo>(
+      this.emprestimosSharedCollection,
+      item.emprestimo,
+    );
+    this.vendasSharedCollection = this.vendaService.addVendaToCollectionIfMissing<IVenda>(this.vendasSharedCollection, item.venda);
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.emprestimoService
+      .query()
+      .pipe(map((res: HttpResponse<IEmprestimo[]>) => res.body ?? []))
+      .pipe(
+        map((emprestimos: IEmprestimo[]) =>
+          this.emprestimoService.addEmprestimoToCollectionIfMissing<IEmprestimo>(emprestimos, this.item?.emprestimo),
+        ),
+      )
+      .subscribe((emprestimos: IEmprestimo[]) => (this.emprestimosSharedCollection = emprestimos));
+
+    this.vendaService
+      .query()
+      .pipe(map((res: HttpResponse<IVenda[]>) => res.body ?? []))
+      .pipe(map((vendas: IVenda[]) => this.vendaService.addVendaToCollectionIfMissing<IVenda>(vendas, this.item?.venda)))
+      .subscribe((vendas: IVenda[]) => (this.vendasSharedCollection = vendas));
   }
 }

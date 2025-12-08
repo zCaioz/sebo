@@ -22,7 +22,6 @@ describe('Venda Form Service', () => {
             id: expect.any(Object),
             dataVenda: expect.any(Object),
             valor: expect.any(Object),
-            item: expect.any(Object),
             usuario: expect.any(Object),
           }),
         );
@@ -36,7 +35,6 @@ describe('Venda Form Service', () => {
             id: expect.any(Object),
             dataVenda: expect.any(Object),
             valor: expect.any(Object),
-            item: expect.any(Object),
             usuario: expect.any(Object),
           }),
         );

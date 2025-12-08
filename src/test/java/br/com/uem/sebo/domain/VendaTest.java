@@ -6,6 +6,8 @@ import static br.com.uem.sebo.domain.VendaTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import br.com.uem.sebo.web.rest.TestUtil;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class VendaTest {
@@ -25,15 +27,25 @@ class VendaTest {
     }
 
     @Test
-    void itemTest() {
+    void itensTest() {
         Venda venda = getVendaRandomSampleGenerator();
         Item itemBack = getItemRandomSampleGenerator();
 
-        venda.setItem(itemBack);
-        assertThat(venda.getItem()).isEqualTo(itemBack);
+        venda.addItens(itemBack);
+        assertThat(venda.getItens()).containsOnly(itemBack);
+        assertThat(itemBack.getVenda()).isEqualTo(venda);
 
-        venda.item(null);
-        assertThat(venda.getItem()).isNull();
+        venda.removeItens(itemBack);
+        assertThat(venda.getItens()).doesNotContain(itemBack);
+        assertThat(itemBack.getVenda()).isNull();
+
+        venda.itens(new HashSet<>(Set.of(itemBack)));
+        assertThat(venda.getItens()).containsOnly(itemBack);
+        assertThat(itemBack.getVenda()).isEqualTo(venda);
+
+        venda.setItens(new HashSet<>());
+        assertThat(venda.getItens()).doesNotContain(itemBack);
+        assertThat(itemBack.getVenda()).isNull();
     }
 
     @Test

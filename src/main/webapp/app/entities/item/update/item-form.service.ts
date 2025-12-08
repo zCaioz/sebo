@@ -23,6 +23,8 @@ type ItemFormGroupContent = {
   genero: FormControl<IItem['genero']>;
   autorArtista: FormControl<IItem['autorArtista']>;
   disponibilidade: FormControl<IItem['disponibilidade']>;
+  emprestimo: FormControl<IItem['emprestimo']>;
+  venda: FormControl<IItem['venda']>;
 };
 
 export type ItemFormGroup = FormGroup<ItemFormGroupContent>;
@@ -51,6 +53,8 @@ export class ItemFormService {
       disponibilidade: new FormControl(itemRawValue.disponibilidade, {
         validators: [Validators.required],
       }),
+      emprestimo: new FormControl(itemRawValue.emprestimo),
+      venda: new FormControl(itemRawValue.venda),
     });
   }
 

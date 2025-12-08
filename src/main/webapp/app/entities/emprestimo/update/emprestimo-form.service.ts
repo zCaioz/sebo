@@ -22,7 +22,6 @@ type EmprestimoFormGroupContent = {
   dataPrevistaDevolucao: FormControl<IEmprestimo['dataPrevistaDevolucao']>;
   dataDevolucao: FormControl<IEmprestimo['dataDevolucao']>;
   status: FormControl<IEmprestimo['status']>;
-  item: FormControl<IEmprestimo['item']>;
   usuario: FormControl<IEmprestimo['usuario']>;
 };
 
@@ -53,7 +52,6 @@ export class EmprestimoFormService {
       status: new FormControl(emprestimoRawValue.status, {
         validators: [Validators.required],
       }),
-      item: new FormControl(emprestimoRawValue.item),
       usuario: new FormControl(emprestimoRawValue.usuario),
     });
   }

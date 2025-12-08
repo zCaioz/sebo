@@ -19,12 +19,14 @@
   "relationships": [
     {
       "otherEntityName": "item",
-      "relationshipName": "item",
+      "otherEntityRelationshipName": "venda",
+      "relationshipName": "itens",
       "relationshipSide": "left",
-      "relationshipType": "many-to-one"
+      "relationshipType": "one-to-many"
     },
     {
       "otherEntityName": "usuario",
+      "otherEntityRelationshipName": "vendas",
       "relationshipName": "usuario",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"

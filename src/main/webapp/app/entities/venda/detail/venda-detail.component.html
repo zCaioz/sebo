@@ -23,14 +23,6 @@
           <dd>
             <span>{{ vendaRef.valor }}</span>
           </dd>
-          <dt><span>Item</span></dt>
-          <dd>
-            @if (venda()!.item) {
-              <div>
-                <a [routerLink]="['/item', venda()!.item?.id, 'view']">{{ vendaRef.item?.id }}</a>
-              </div>
-            }
-          </dd>
           <dt><span>Usuario</span></dt>
           <dd>
             @if (venda()!.usuario) {

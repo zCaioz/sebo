@@ -61,6 +61,9 @@ public class ItemAsserts {
      * @param actual the actual entity
      */
     public static void assertItemUpdatableRelationshipsEquals(Item expected, Item actual) {
-        // empty method
+        assertThat(actual)
+            .as("Verify Item relationships")
+            .satisfies(a -> assertThat(a.getEmprestimo()).as("check emprestimo").isEqualTo(expected.getEmprestimo()))
+            .satisfies(a -> assertThat(a.getVenda()).as("check venda").isEqualTo(expected.getVenda()));
     }
 }

@@ -7,12 +7,10 @@ import { finalize, map } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IItem } from 'app/entities/item/item.model';
-import { ItemService } from 'app/entities/item/service/item.service';
 import { IUsuario } from 'app/entities/usuario/usuario.model';
 import { UsuarioService } from 'app/entities/usuario/service/usuario.service';
-import { VendaService } from '../service/venda.service';
 import { IVenda } from '../venda.model';
+import { VendaService } from '../service/venda.service';
 import { VendaFormGroup, VendaFormService } from './venda-form.service';
 
 @Component({
@@ -24,19 +22,15 @@ export class VendaUpdateComponent implements OnInit {
   isSaving = false;
   venda: IVenda | null = null;
 
-  itemsSharedCollection: IItem[] = [];
   usuariosSharedCollection: IUsuario[] = [];
 
   protected vendaService = inject(VendaService);
   protected vendaFormService = inject(VendaFormService);
-  protected itemService = inject(ItemService);
   protected usuarioService = inject(UsuarioService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: VendaFormGroup = this.vendaFormService.createVendaFormGroup();
-
-  compareItem = (o1: IItem | null, o2: IItem | null): boolean => this.itemService.compareItem(o1, o2);
 
   compareUsuario = (o1: IUsuario | null, o2: IUsuario | null): boolean => this.usuarioService.compareUsuario(o1, o2);
 
@@ -88,7 +82,6 @@ export class VendaUpdateComponent implements OnInit {
     this.venda = venda;
     this.vendaFormService.resetForm(this.editForm, venda);
 
-    this.itemsSharedCollection = this.itemService.addItemToCollectionIfMissing<IItem>(this.itemsSharedCollection, venda.item);
     this.usuariosSharedCollection = this.usuarioService.addUsuarioToCollectionIfMissing<IUsuario>(
       this.usuariosSharedCollection,
       venda.usuario,
@@ -96,12 +89,6 @@ export class VendaUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
-    this.itemService
-      .query()
-      .pipe(map((res: HttpResponse<IItem[]>) => res.body ?? []))
-      .pipe(map((items: IItem[]) => this.itemService.addItemToCollectionIfMissing<IItem>(items, this.venda?.item)))
-      .subscribe((items: IItem[]) => (this.itemsSharedCollection = items));
-
     this.usuarioService
       .query()
       .pipe(map((res: HttpResponse<IUsuario[]>) => res.body ?? []))

@@ -33,14 +33,6 @@
               { null: '', EM_ANDAMENTO: 'EM_ANDAMENTO', DEVOLVIDO: 'DEVOLVIDO', ATRASADO: 'ATRASADO' }[emprestimoRef.status ?? 'null']
             }}</span>
           </dd>
-          <dt><span>Item</span></dt>
-          <dd>
-            @if (emprestimo()!.item) {
-              <div>
-                <a [routerLink]="['/item', emprestimo()!.item?.id, 'view']">{{ emprestimoRef.item?.id }}</a>
-              </div>
-            }
-          </dd>
           <dt><span>Usuario</span></dt>
           <dd>
             @if (emprestimo()!.usuario) {

@@ -29,12 +29,14 @@
   "relationships": [
     {
       "otherEntityName": "item",
-      "relationshipName": "item",
+      "otherEntityRelationshipName": "emprestimo",
+      "relationshipName": "itens",
       "relationshipSide": "left",
-      "relationshipType": "many-to-one"
+      "relationshipType": "one-to-many"
     },
     {
       "otherEntityName": "usuario",
+      "otherEntityRelationshipName": "emprestimos",
       "relationshipName": "usuario",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"

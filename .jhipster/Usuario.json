@@ -20,6 +20,21 @@
     }
   ],
   "name": "Usuario",
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityName": "emprestimo",
+      "otherEntityRelationshipName": "usuario",
+      "relationshipName": "emprestimos",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "venda",
+      "otherEntityRelationshipName": "usuario",
+      "relationshipName": "vendas",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ],
   "searchEngine": "no"
 }

@@ -20,7 +20,6 @@ type VendaFormGroupContent = {
   id: FormControl<IVenda['id'] | NewVenda['id']>;
   dataVenda: FormControl<IVenda['dataVenda']>;
   valor: FormControl<IVenda['valor']>;
-  item: FormControl<IVenda['item']>;
   usuario: FormControl<IVenda['usuario']>;
 };
 
@@ -47,7 +46,6 @@ export class VendaFormService {
       valor: new FormControl(vendaRawValue.valor, {
         validators: [Validators.required],
       }),
-      item: new FormControl(vendaRawValue.item),
       usuario: new FormControl(vendaRawValue.usuario),
     });
   }

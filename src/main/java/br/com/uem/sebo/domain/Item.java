@@ -1,5 +1,6 @@
 package br.com.uem.sebo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -10,7 +11,6 @@ import java.io.Serializable;
 @Entity
 @Table(name = "item")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Item implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,6 +37,14 @@ public class Item implements Serializable {
     @NotNull
     @Column(name = "disponibilidade", nullable = false)
     private Boolean disponibilidade;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "itens", "usuario" }, allowSetters = true)
+    private Emprestimo emprestimo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "itens", "usuario" }, allowSetters = true)
+    private Venda venda;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -118,8 +126,33 @@ public class Item implements Serializable {
         this.disponibilidade = disponibilidade;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    public Emprestimo getEmprestimo() {
+        return this.emprestimo;
+    }
+
+    public void setEmprestimo(Emprestimo emprestimo) {
+        this.emprestimo = emprestimo;
+    }
+
+    public Item emprestimo(Emprestimo emprestimo) {
+        this.setEmprestimo(emprestimo);
+        return this;
+    }
+
+    public Venda getVenda() {
+        return this.venda;
+    }
+
+    public void setVenda(Venda venda) {
+        this.venda = venda;
+    }
+
+    public Item venda(Venda venda) {
+        this.setVenda(venda);
+        return this;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -134,8 +167,7 @@ public class Item implements Serializable {
 
     @Override
     public int hashCode() {
-        // see
-        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -143,12 +175,12 @@ public class Item implements Serializable {
     @Override
     public String toString() {
         return "Item{" +
-                "id=" + getId() +
-                ", titulo='" + getTitulo() + "'" +
-                ", ano=" + getAno() +
-                ", genero='" + getGenero() + "'" +
-                ", autorArtista='" + getAutorArtista() + "'" +
-                ", disponibilidade='" + getDisponibilidade() + "'" +
-                "}";
+            "id=" + getId() +
+            ", titulo='" + getTitulo() + "'" +
+            ", ano=" + getAno() +
+            ", genero='" + getGenero() + "'" +
+            ", autorArtista='" + getAutorArtista() + "'" +
+            ", disponibilidade='" + getDisponibilidade() + "'" +
+            "}";
     }
 }

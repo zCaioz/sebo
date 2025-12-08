@@ -1,6 +1,8 @@
 package br.com.uem.sebo.domain;
 
+import static br.com.uem.sebo.domain.EmprestimoTestSamples.*;
 import static br.com.uem.sebo.domain.ItemTestSamples.*;
+import static br.com.uem.sebo.domain.VendaTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import br.com.uem.sebo.web.rest.TestUtil;
@@ -20,5 +22,29 @@ class ItemTest {
 
         item2 = getItemSample2();
         assertThat(item1).isNotEqualTo(item2);
+    }
+
+    @Test
+    void emprestimoTest() {
+        Item item = getItemRandomSampleGenerator();
+        Emprestimo emprestimoBack = getEmprestimoRandomSampleGenerator();
+
+        item.setEmprestimo(emprestimoBack);
+        assertThat(item.getEmprestimo()).isEqualTo(emprestimoBack);
+
+        item.emprestimo(null);
+        assertThat(item.getEmprestimo()).isNull();
+    }
+
+    @Test
+    void vendaTest() {
+        Item item = getItemRandomSampleGenerator();
+        Venda vendaBack = getVendaRandomSampleGenerator();
+
+        item.setVenda(vendaBack);
+        assertThat(item.getVenda()).isEqualTo(vendaBack);
+
+        item.venda(null);
+        assertThat(item.getVenda()).isNull();
     }
 }

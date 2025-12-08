@@ -54,12 +54,6 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <th scope="col" jhiSortBy="item.id">
-              <div class="d-flex">
-                <span>Item</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
             <th scope="col" jhiSortBy="usuario.id">
               <div class="d-flex">
                 <span>Usuario</span>
@@ -77,13 +71,6 @@
               </td>
               <td>{{ venda.dataVenda | formatMediumDate }}</td>
               <td>{{ venda.valor }}</td>
-              <td>
-                @if (venda.item) {
-                  <div>
-                    <a [routerLink]="['/item', venda.item.id, 'view']">{{ venda.item.id }}</a>
-                  </div>
-                }
-              </td>
               <td>
                 @if (venda.usuario) {
                   <div>

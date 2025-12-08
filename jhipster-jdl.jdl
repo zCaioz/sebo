@@ -52,18 +52,12 @@ entity Venda {
   valor BigDecimal required
 }
 
-// ============================
-// Relacionamentos
-// ============================
-
-// Emprestimo → Item e Usuario
-relationship ManyToOne {
-  Emprestimo{item} to Item,
-  Emprestimo{usuario} to Usuario
+relationship OneToMany {
+  Emprestimo{itens} to Item{emprestimo},
+  Venda{itens} to Item{venda},
 }
 
-// Venda → Item e Usuario
 relationship ManyToOne {
-  Venda{item} to Item,
-  Venda{usuario} to Usuario
+  Emprestimo{usuario} to Usuario{emprestimos}
+  Venda{usuario} to Usuario{vendas}
 }

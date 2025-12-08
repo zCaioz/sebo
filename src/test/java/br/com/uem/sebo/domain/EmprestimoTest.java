@@ -6,6 +6,8 @@ import static br.com.uem.sebo.domain.UsuarioTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import br.com.uem.sebo.web.rest.TestUtil;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class EmprestimoTest {
@@ -25,15 +27,25 @@ class EmprestimoTest {
     }
 
     @Test
-    void itemTest() {
+    void itensTest() {
         Emprestimo emprestimo = getEmprestimoRandomSampleGenerator();
         Item itemBack = getItemRandomSampleGenerator();
 
-        emprestimo.setItem(itemBack);
-        assertThat(emprestimo.getItem()).isEqualTo(itemBack);
+        emprestimo.addItens(itemBack);
+        assertThat(emprestimo.getItens()).containsOnly(itemBack);
+        assertThat(itemBack.getEmprestimo()).isEqualTo(emprestimo);
 
-        emprestimo.item(null);
-        assertThat(emprestimo.getItem()).isNull();
+        emprestimo.removeItens(itemBack);
+        assertThat(emprestimo.getItens()).doesNotContain(itemBack);
+        assertThat(itemBack.getEmprestimo()).isNull();
+
+        emprestimo.itens(new HashSet<>(Set.of(itemBack)));
+        assertThat(emprestimo.getItens()).containsOnly(itemBack);
+        assertThat(itemBack.getEmprestimo()).isEqualTo(emprestimo);
+
+        emprestimo.setItens(new HashSet<>());
+        assertThat(emprestimo.getItens()).doesNotContain(itemBack);
+        assertThat(itemBack.getEmprestimo()).isNull();
     }
 
     @Test
