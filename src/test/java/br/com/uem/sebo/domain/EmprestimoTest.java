@@ -27,28 +27,6 @@ class EmprestimoTest {
     }
 
     @Test
-    void itensTest() {
-        Emprestimo emprestimo = getEmprestimoRandomSampleGenerator();
-        Item itemBack = getItemRandomSampleGenerator();
-
-        emprestimo.addItens(itemBack);
-        assertThat(emprestimo.getItens()).containsOnly(itemBack);
-        assertThat(itemBack.getEmprestimo()).isEqualTo(emprestimo);
-
-        emprestimo.removeItens(itemBack);
-        assertThat(emprestimo.getItens()).doesNotContain(itemBack);
-        assertThat(itemBack.getEmprestimo()).isNull();
-
-        emprestimo.itens(new HashSet<>(Set.of(itemBack)));
-        assertThat(emprestimo.getItens()).containsOnly(itemBack);
-        assertThat(itemBack.getEmprestimo()).isEqualTo(emprestimo);
-
-        emprestimo.setItens(new HashSet<>());
-        assertThat(emprestimo.getItens()).doesNotContain(itemBack);
-        assertThat(itemBack.getEmprestimo()).isNull();
-    }
-
-    @Test
     void usuarioTest() {
         Emprestimo emprestimo = getEmprestimoRandomSampleGenerator();
         Usuario usuarioBack = getUsuarioRandomSampleGenerator();
@@ -58,5 +36,23 @@ class EmprestimoTest {
 
         emprestimo.usuario(null);
         assertThat(emprestimo.getUsuario()).isNull();
+    }
+
+    @Test
+    void itensTest() {
+        Emprestimo emprestimo = getEmprestimoRandomSampleGenerator();
+        Item itemBack = getItemRandomSampleGenerator();
+
+        emprestimo.addItens(itemBack);
+        assertThat(emprestimo.getItens()).containsOnly(itemBack);
+
+        emprestimo.removeItens(itemBack);
+        assertThat(emprestimo.getItens()).doesNotContain(itemBack);
+
+        emprestimo.itens(new HashSet<>(Set.of(itemBack)));
+        assertThat(emprestimo.getItens()).containsOnly(itemBack);
+
+        emprestimo.setItens(new HashSet<>());
+        assertThat(emprestimo.getItens()).doesNotContain(itemBack);
     }
 }

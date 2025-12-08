@@ -6,6 +6,8 @@ import static br.com.uem.sebo.domain.VendaTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import br.com.uem.sebo.web.rest.TestUtil;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class ItemTest {
@@ -29,11 +31,21 @@ class ItemTest {
         Item item = getItemRandomSampleGenerator();
         Emprestimo emprestimoBack = getEmprestimoRandomSampleGenerator();
 
-        item.setEmprestimo(emprestimoBack);
-        assertThat(item.getEmprestimo()).isEqualTo(emprestimoBack);
+        item.addEmprestimo(emprestimoBack);
+        assertThat(item.getEmprestimos()).containsOnly(emprestimoBack);
+        assertThat(emprestimoBack.getItens()).containsOnly(item);
 
-        item.emprestimo(null);
-        assertThat(item.getEmprestimo()).isNull();
+        item.removeEmprestimo(emprestimoBack);
+        assertThat(item.getEmprestimos()).doesNotContain(emprestimoBack);
+        assertThat(emprestimoBack.getItens()).doesNotContain(item);
+
+        item.emprestimos(new HashSet<>(Set.of(emprestimoBack)));
+        assertThat(item.getEmprestimos()).containsOnly(emprestimoBack);
+        assertThat(emprestimoBack.getItens()).containsOnly(item);
+
+        item.setEmprestimos(new HashSet<>());
+        assertThat(item.getEmprestimos()).doesNotContain(emprestimoBack);
+        assertThat(emprestimoBack.getItens()).doesNotContain(item);
     }
 
     @Test
@@ -41,10 +53,20 @@ class ItemTest {
         Item item = getItemRandomSampleGenerator();
         Venda vendaBack = getVendaRandomSampleGenerator();
 
-        item.setVenda(vendaBack);
-        assertThat(item.getVenda()).isEqualTo(vendaBack);
+        item.addVenda(vendaBack);
+        assertThat(item.getVendas()).containsOnly(vendaBack);
+        assertThat(vendaBack.getItens()).containsOnly(item);
 
-        item.venda(null);
-        assertThat(item.getVenda()).isNull();
+        item.removeVenda(vendaBack);
+        assertThat(item.getVendas()).doesNotContain(vendaBack);
+        assertThat(vendaBack.getItens()).doesNotContain(item);
+
+        item.vendas(new HashSet<>(Set.of(vendaBack)));
+        assertThat(item.getVendas()).containsOnly(vendaBack);
+        assertThat(vendaBack.getItens()).containsOnly(item);
+
+        item.setVendas(new HashSet<>());
+        assertThat(item.getVendas()).doesNotContain(vendaBack);
+        assertThat(vendaBack.getItens()).doesNotContain(item);
     }
 }

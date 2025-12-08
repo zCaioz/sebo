@@ -141,12 +141,17 @@ public class VendaResource {
     /**
      * {@code GET  /vendas} : get all the vendas.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of vendas in body.
      */
     @GetMapping("")
-    public List<Venda> getAllVendas() {
+    public List<Venda> getAllVendas(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
         LOG.debug("REST request to get all Vendas");
-        return vendaRepository.findAll();
+        if (eagerload) {
+            return vendaRepository.findAllWithEagerRelationships();
+        } else {
+            return vendaRepository.findAll();
+        }
     }
 
     /**
@@ -158,7 +163,7 @@ public class VendaResource {
     @GetMapping("/{id}")
     public ResponseEntity<Venda> getVenda(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Venda : {}", id);
-        Optional<Venda> venda = vendaRepository.findById(id);
+        Optional<Venda> venda = vendaRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(venda);
     }
 

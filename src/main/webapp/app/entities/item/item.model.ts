@@ -8,8 +8,8 @@ export interface IItem {
   genero?: string | null;
   autorArtista?: string | null;
   disponibilidade?: boolean | null;
-  emprestimo?: IEmprestimo | null;
-  venda?: IVenda | null;
+  emprestimos?: IEmprestimo[] | null;
+  vendas?: IVenda[] | null;
 }
 
 export type NewItem = Omit<IItem, 'id'> & { id: null };

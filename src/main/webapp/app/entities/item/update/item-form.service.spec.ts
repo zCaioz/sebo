@@ -25,8 +25,8 @@ describe('Item Form Service', () => {
             genero: expect.any(Object),
             autorArtista: expect.any(Object),
             disponibilidade: expect.any(Object),
-            emprestimo: expect.any(Object),
-            venda: expect.any(Object),
+            emprestimos: expect.any(Object),
+            vendas: expect.any(Object),
           }),
         );
       });
@@ -42,8 +42,8 @@ describe('Item Form Service', () => {
             genero: expect.any(Object),
             autorArtista: expect.any(Object),
             disponibilidade: expect.any(Object),
-            emprestimo: expect.any(Object),
-            venda: expect.any(Object),
+            emprestimos: expect.any(Object),
+            vendas: expect.any(Object),
           }),
         );
       });

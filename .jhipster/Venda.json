@@ -18,18 +18,18 @@
   "name": "Venda",
   "relationships": [
     {
-      "otherEntityName": "item",
-      "otherEntityRelationshipName": "venda",
-      "relationshipName": "itens",
-      "relationshipSide": "left",
-      "relationshipType": "one-to-many"
-    },
-    {
       "otherEntityName": "usuario",
       "otherEntityRelationshipName": "vendas",
       "relationshipName": "usuario",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "item",
+      "otherEntityRelationshipName": "venda",
+      "relationshipName": "itens",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
     }
   ],
   "searchEngine": "no"

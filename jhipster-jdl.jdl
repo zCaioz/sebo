@@ -52,7 +52,7 @@ entity Venda {
   valor BigDecimal required
 }
 
-relationship OneToMany {
+relationship ManyToMany {
   Emprestimo{itens} to Item{emprestimo},
   Venda{itens} to Item{venda},
 }

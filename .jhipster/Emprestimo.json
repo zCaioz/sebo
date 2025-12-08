@@ -28,18 +28,18 @@
   "name": "Emprestimo",
   "relationships": [
     {
-      "otherEntityName": "item",
-      "otherEntityRelationshipName": "emprestimo",
-      "relationshipName": "itens",
-      "relationshipSide": "left",
-      "relationshipType": "one-to-many"
-    },
-    {
       "otherEntityName": "usuario",
       "otherEntityRelationshipName": "emprestimos",
       "relationshipName": "usuario",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "item",
+      "otherEntityRelationshipName": "emprestimo",
+      "relationshipName": "itens",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
     }
   ],
   "searchEngine": "no"

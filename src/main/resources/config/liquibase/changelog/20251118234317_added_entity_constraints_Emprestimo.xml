@@ -16,5 +16,19 @@
                                  referencedColumnNames="id"
                                  referencedTableName="usuario"
                                  />
+
+        <addForeignKeyConstraint baseColumnNames="emprestimo_id"
+                                 baseTableName="rel_emprestimo__itens"
+                                 constraintName="fk_rel_emprestimo__itens__emprestimo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="emprestimo"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="itens_id"
+                                 baseTableName="rel_emprestimo__itens"
+                                 constraintName="fk_rel_emprestimo__itens__itens_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="item"
+                                 />
     </changeSet>
 </databaseChangeLog>

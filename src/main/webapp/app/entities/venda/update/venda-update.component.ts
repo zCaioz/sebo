@@ -9,8 +9,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IUsuario } from 'app/entities/usuario/usuario.model';
 import { UsuarioService } from 'app/entities/usuario/service/usuario.service';
-import { IVenda } from '../venda.model';
+import { IItem } from 'app/entities/item/item.model';
+import { ItemService } from 'app/entities/item/service/item.service';
 import { VendaService } from '../service/venda.service';
+import { IVenda } from '../venda.model';
 import { VendaFormGroup, VendaFormService } from './venda-form.service';
 
 @Component({
@@ -23,16 +25,20 @@ export class VendaUpdateComponent implements OnInit {
   venda: IVenda | null = null;
 
   usuariosSharedCollection: IUsuario[] = [];
+  itemsSharedCollection: IItem[] = [];
 
   protected vendaService = inject(VendaService);
   protected vendaFormService = inject(VendaFormService);
   protected usuarioService = inject(UsuarioService);
+  protected itemService = inject(ItemService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: VendaFormGroup = this.vendaFormService.createVendaFormGroup();
 
   compareUsuario = (o1: IUsuario | null, o2: IUsuario | null): boolean => this.usuarioService.compareUsuario(o1, o2);
+
+  compareItem = (o1: IItem | null, o2: IItem | null): boolean => this.itemService.compareItem(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ venda }) => {
@@ -86,6 +92,7 @@ export class VendaUpdateComponent implements OnInit {
       this.usuariosSharedCollection,
       venda.usuario,
     );
+    this.itemsSharedCollection = this.itemService.addItemToCollectionIfMissing<IItem>(this.itemsSharedCollection, ...(venda.itens ?? []));
   }
 
   protected loadRelationshipsOptions(): void {
@@ -94,5 +101,11 @@ export class VendaUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUsuario[]>) => res.body ?? []))
       .pipe(map((usuarios: IUsuario[]) => this.usuarioService.addUsuarioToCollectionIfMissing<IUsuario>(usuarios, this.venda?.usuario)))
       .subscribe((usuarios: IUsuario[]) => (this.usuariosSharedCollection = usuarios));
+
+    this.itemService
+      .query()
+      .pipe(map((res: HttpResponse<IItem[]>) => res.body ?? []))
+      .pipe(map((items: IItem[]) => this.itemService.addItemToCollectionIfMissing<IItem>(items, ...(this.venda?.itens ?? []))))
+      .subscribe((items: IItem[]) => (this.itemsSharedCollection = items));
   }
 }

@@ -102,17 +102,19 @@
               <td>{{ item.autorArtista }}</td>
               <td>{{ item.disponibilidade }}</td>
               <td>
-                @if (item.emprestimo) {
-                  <div>
-                    <a [routerLink]="['/emprestimo', item.emprestimo.id, 'view']">{{ item.emprestimo.id }}</a>
-                  </div>
+                @for (emprestimo of item.emprestimos; track $index; let last = $last) {
+                  <span>
+                    <a class="form-control-static" [routerLink]="['/emprestimo', emprestimo.id, 'view']">{{ emprestimo.id }}</a
+                    >{{ last ? '' : ', ' }}
+                  </span>
                 }
               </td>
               <td>
-                @if (item.venda) {
-                  <div>
-                    <a [routerLink]="['/venda', item.venda.id, 'view']">{{ item.venda.id }}</a>
-                  </div>
+                @for (venda of item.vendas; track $index; let last = $last) {
+                  <span>
+                    <a class="form-control-static" [routerLink]="['/venda', venda.id, 'view']">{{ venda.id }}</a
+                    >{{ last ? '' : ', ' }}
+                  </span>
                 }
               </td>
               <td class="text-end">

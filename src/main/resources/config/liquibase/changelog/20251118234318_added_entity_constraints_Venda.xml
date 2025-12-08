@@ -16,5 +16,19 @@
                                  referencedColumnNames="id"
                                  referencedTableName="usuario"
                                  />
+
+        <addForeignKeyConstraint baseColumnNames="venda_id"
+                                 baseTableName="rel_venda__itens"
+                                 constraintName="fk_rel_venda__itens__venda_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="venda"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="itens_id"
+                                 baseTableName="rel_venda__itens"
+                                 constraintName="fk_rel_venda__itens__itens_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="item"
+                                 />
     </changeSet>
 </databaseChangeLog>

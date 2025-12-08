@@ -37,18 +37,20 @@
           </dd>
           <dt><span>Emprestimo</span></dt>
           <dd>
-            @if (item()!.emprestimo) {
-              <div>
-                <a [routerLink]="['/emprestimo', item()!.emprestimo?.id, 'view']">{{ itemRef.emprestimo?.id }}</a>
-              </div>
+            @for (emprestimo of itemRef.emprestimos; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/emprestimo', emprestimo.id, 'view']">{{ emprestimo?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
             }
           </dd>
           <dt><span>Venda</span></dt>
           <dd>
-            @if (item()!.venda) {
-              <div>
-                <a [routerLink]="['/venda', item()!.venda?.id, 'view']">{{ itemRef.venda?.id }}</a>
-              </div>
+            @for (venda of itemRef.vendas; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/venda', venda.id, 'view']">{{ venda?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
             }
           </dd>
         </dl>

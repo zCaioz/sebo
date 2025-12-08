@@ -35,11 +35,11 @@ public class Usuario implements Serializable {
     private String telefone;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
-    @JsonIgnoreProperties(value = { "itens", "usuario" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "usuario", "itens" }, allowSetters = true)
     private Set<Emprestimo> emprestimos = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
-    @JsonIgnoreProperties(value = { "itens", "usuario" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "usuario", "itens" }, allowSetters = true)
     private Set<Venda> vendas = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

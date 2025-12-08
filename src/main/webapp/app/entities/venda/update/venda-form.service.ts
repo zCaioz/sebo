@@ -14,13 +14,14 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type VendaFormGroupInput = IVenda | PartialWithRequiredKeyOf<NewVenda>;
 
-type VendaFormDefaults = Pick<NewVenda, 'id'>;
+type VendaFormDefaults = Pick<NewVenda, 'id' | 'itens'>;
 
 type VendaFormGroupContent = {
   id: FormControl<IVenda['id'] | NewVenda['id']>;
   dataVenda: FormControl<IVenda['dataVenda']>;
   valor: FormControl<IVenda['valor']>;
   usuario: FormControl<IVenda['usuario']>;
+  itens: FormControl<IVenda['itens']>;
 };
 
 export type VendaFormGroup = FormGroup<VendaFormGroupContent>;
@@ -47,6 +48,7 @@ export class VendaFormService {
         validators: [Validators.required],
       }),
       usuario: new FormControl(vendaRawValue.usuario),
+      itens: new FormControl(vendaRawValue.itens ?? []),
     });
   }
 
@@ -67,6 +69,7 @@ export class VendaFormService {
   private getFormDefaults(): VendaFormDefaults {
     return {
       id: null,
+      itens: [],
     };
   }
 }

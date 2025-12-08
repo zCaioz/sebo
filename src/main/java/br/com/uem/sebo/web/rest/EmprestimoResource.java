@@ -149,12 +149,19 @@ public class EmprestimoResource {
     /**
      * {@code GET  /emprestimos} : get all the emprestimos.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of emprestimos in body.
      */
     @GetMapping("")
-    public List<Emprestimo> getAllEmprestimos() {
+    public List<Emprestimo> getAllEmprestimos(
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
+    ) {
         LOG.debug("REST request to get all Emprestimos");
-        return emprestimoRepository.findAll();
+        if (eagerload) {
+            return emprestimoRepository.findAllWithEagerRelationships();
+        } else {
+            return emprestimoRepository.findAll();
+        }
     }
 
     /**
@@ -166,7 +173,7 @@ public class EmprestimoResource {
     @GetMapping("/{id}")
     public ResponseEntity<Emprestimo> getEmprestimo(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Emprestimo : {}", id);
-        Optional<Emprestimo> emprestimo = emprestimoRepository.findById(id);
+        Optional<Emprestimo> emprestimo = emprestimoRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(emprestimo);
     }
 

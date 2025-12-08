@@ -41,13 +41,18 @@ public class Emprestimo implements Serializable {
     @Column(name = "status", nullable = false)
     private StatusEmprestimo status;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "emprestimo")
-    @JsonIgnoreProperties(value = { "emprestimo", "venda" }, allowSetters = true)
-    private Set<Item> itens = new HashSet<>();
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "emprestimos", "vendas" }, allowSetters = true)
     private Usuario usuario;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "rel_emprestimo__itens",
+        joinColumns = @JoinColumn(name = "emprestimo_id"),
+        inverseJoinColumns = @JoinColumn(name = "itens_id")
+    )
+    @JsonIgnoreProperties(value = { "emprestimos", "vendas" }, allowSetters = true)
+    private Set<Item> itens = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -116,37 +121,6 @@ public class Emprestimo implements Serializable {
         this.status = status;
     }
 
-    public Set<Item> getItens() {
-        return this.itens;
-    }
-
-    public void setItens(Set<Item> items) {
-        if (this.itens != null) {
-            this.itens.forEach(i -> i.setEmprestimo(null));
-        }
-        if (items != null) {
-            items.forEach(i -> i.setEmprestimo(this));
-        }
-        this.itens = items;
-    }
-
-    public Emprestimo itens(Set<Item> items) {
-        this.setItens(items);
-        return this;
-    }
-
-    public Emprestimo addItens(Item item) {
-        this.itens.add(item);
-        item.setEmprestimo(this);
-        return this;
-    }
-
-    public Emprestimo removeItens(Item item) {
-        this.itens.remove(item);
-        item.setEmprestimo(null);
-        return this;
-    }
-
     public Usuario getUsuario() {
         return this.usuario;
     }
@@ -157,6 +131,29 @@ public class Emprestimo implements Serializable {
 
     public Emprestimo usuario(Usuario usuario) {
         this.setUsuario(usuario);
+        return this;
+    }
+
+    public Set<Item> getItens() {
+        return this.itens;
+    }
+
+    public void setItens(Set<Item> items) {
+        this.itens = items;
+    }
+
+    public Emprestimo itens(Set<Item> items) {
+        this.setItens(items);
+        return this;
+    }
+
+    public Emprestimo addItens(Item item) {
+        this.itens.add(item);
+        return this;
+    }
+
+    public Emprestimo removeItens(Item item) {
+        this.itens.remove(item);
         return this;
     }
 

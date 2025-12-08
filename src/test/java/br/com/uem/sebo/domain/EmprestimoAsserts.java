@@ -64,6 +64,7 @@ public class EmprestimoAsserts {
     public static void assertEmprestimoUpdatableRelationshipsEquals(Emprestimo expected, Emprestimo actual) {
         assertThat(actual)
             .as("Verify Emprestimo relationships")
-            .satisfies(a -> assertThat(a.getUsuario()).as("check usuario").isEqualTo(expected.getUsuario()));
+            .satisfies(a -> assertThat(a.getUsuario()).as("check usuario").isEqualTo(expected.getUsuario()))
+            .satisfies(a -> assertThat(a.getItens()).as("check itens").isEqualTo(expected.getItens()));
     }
 }

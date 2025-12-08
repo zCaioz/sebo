@@ -34,14 +34,14 @@
       "otherEntityRelationshipName": "itens",
       "relationshipName": "emprestimo",
       "relationshipSide": "right",
-      "relationshipType": "many-to-one"
+      "relationshipType": "many-to-many"
     },
     {
       "otherEntityName": "venda",
       "otherEntityRelationshipName": "itens",
       "relationshipName": "venda",
       "relationshipSide": "right",
-      "relationshipType": "many-to-one"
+      "relationshipType": "many-to-many"
     }
   ],
   "searchEngine": "no"

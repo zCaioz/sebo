@@ -23,6 +23,7 @@ describe('Venda Form Service', () => {
             dataVenda: expect.any(Object),
             valor: expect.any(Object),
             usuario: expect.any(Object),
+            itens: expect.any(Object),
           }),
         );
       });
@@ -36,6 +37,7 @@ describe('Venda Form Service', () => {
             dataVenda: expect.any(Object),
             valor: expect.any(Object),
             usuario: expect.any(Object),
+            itens: expect.any(Object),
           }),
         );
       });

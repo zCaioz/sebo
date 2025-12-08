@@ -41,6 +41,15 @@
               </div>
             }
           </dd>
+          <dt><span>Itens</span></dt>
+          <dd>
+            @for (itens of emprestimoRef.itens; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/item', itens.id, 'view']">{{ itens?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
         </dl>
 
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

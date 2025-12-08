@@ -53,12 +53,12 @@ describe('Item Management Update Component', () => {
   describe('ngOnInit', () => {
     it('should call Emprestimo query and add missing value', () => {
       const item: IItem = { id: 13382 };
-      const emprestimo: IEmprestimo = { id: 30317 };
-      item.emprestimo = emprestimo;
+      const emprestimos: IEmprestimo[] = [{ id: 30317 }];
+      item.emprestimos = emprestimos;
 
       const emprestimoCollection: IEmprestimo[] = [{ id: 30317 }];
       jest.spyOn(emprestimoService, 'query').mockReturnValue(of(new HttpResponse({ body: emprestimoCollection })));
-      const additionalEmprestimos = [emprestimo];
+      const additionalEmprestimos = [...emprestimos];
       const expectedCollection: IEmprestimo[] = [...additionalEmprestimos, ...emprestimoCollection];
       jest.spyOn(emprestimoService, 'addEmprestimoToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -75,12 +75,12 @@ describe('Item Management Update Component', () => {
 
     it('should call Venda query and add missing value', () => {
       const item: IItem = { id: 13382 };
-      const venda: IVenda = { id: 31753 };
-      item.venda = venda;
+      const vendas: IVenda[] = [{ id: 31753 }];
+      item.vendas = vendas;
 
       const vendaCollection: IVenda[] = [{ id: 31753 }];
       jest.spyOn(vendaService, 'query').mockReturnValue(of(new HttpResponse({ body: vendaCollection })));
-      const additionalVendas = [venda];
+      const additionalVendas = [...vendas];
       const expectedCollection: IVenda[] = [...additionalVendas, ...vendaCollection];
       jest.spyOn(vendaService, 'addVendaToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -98,9 +98,9 @@ describe('Item Management Update Component', () => {
     it('should update editForm', () => {
       const item: IItem = { id: 13382 };
       const emprestimo: IEmprestimo = { id: 30317 };
-      item.emprestimo = emprestimo;
+      item.emprestimos = [emprestimo];
       const venda: IVenda = { id: 31753 };
-      item.venda = venda;
+      item.vendas = [venda];
 
       activatedRoute.data = of({ item });
       comp.ngOnInit();

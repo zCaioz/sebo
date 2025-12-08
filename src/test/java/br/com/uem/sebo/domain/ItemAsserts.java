@@ -63,7 +63,7 @@ public class ItemAsserts {
     public static void assertItemUpdatableRelationshipsEquals(Item expected, Item actual) {
         assertThat(actual)
             .as("Verify Item relationships")
-            .satisfies(a -> assertThat(a.getEmprestimo()).as("check emprestimo").isEqualTo(expected.getEmprestimo()))
-            .satisfies(a -> assertThat(a.getVenda()).as("check venda").isEqualTo(expected.getVenda()));
+            .satisfies(a -> assertThat(a.getEmprestimos()).as("check emprestimos").isEqualTo(expected.getEmprestimos()))
+            .satisfies(a -> assertThat(a.getVendas()).as("check vendas").isEqualTo(expected.getVendas()));
     }
 }

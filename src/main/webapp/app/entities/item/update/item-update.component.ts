@@ -90,9 +90,12 @@ export class ItemUpdateComponent implements OnInit {
 
     this.emprestimosSharedCollection = this.emprestimoService.addEmprestimoToCollectionIfMissing<IEmprestimo>(
       this.emprestimosSharedCollection,
-      item.emprestimo,
+      ...(item.emprestimos ?? []),
     );
-    this.vendasSharedCollection = this.vendaService.addVendaToCollectionIfMissing<IVenda>(this.vendasSharedCollection, item.venda);
+    this.vendasSharedCollection = this.vendaService.addVendaToCollectionIfMissing<IVenda>(
+      this.vendasSharedCollection,
+      ...(item.vendas ?? []),
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -101,7 +104,7 @@ export class ItemUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IEmprestimo[]>) => res.body ?? []))
       .pipe(
         map((emprestimos: IEmprestimo[]) =>
-          this.emprestimoService.addEmprestimoToCollectionIfMissing<IEmprestimo>(emprestimos, this.item?.emprestimo),
+          this.emprestimoService.addEmprestimoToCollectionIfMissing<IEmprestimo>(emprestimos, ...(this.item?.emprestimos ?? [])),
         ),
       )
       .subscribe((emprestimos: IEmprestimo[]) => (this.emprestimosSharedCollection = emprestimos));
@@ -109,7 +112,7 @@ export class ItemUpdateComponent implements OnInit {
     this.vendaService
       .query()
       .pipe(map((res: HttpResponse<IVenda[]>) => res.body ?? []))
-      .pipe(map((vendas: IVenda[]) => this.vendaService.addVendaToCollectionIfMissing<IVenda>(vendas, this.item?.venda)))
+      .pipe(map((vendas: IVenda[]) => this.vendaService.addVendaToCollectionIfMissing<IVenda>(vendas, ...(this.item?.vendas ?? []))))
       .subscribe((vendas: IVenda[]) => (this.vendasSharedCollection = vendas));
   }
 }

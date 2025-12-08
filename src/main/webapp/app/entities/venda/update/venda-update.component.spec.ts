@@ -6,8 +6,10 @@ import { Subject, from, of } from 'rxjs';
 
 import { IUsuario } from 'app/entities/usuario/usuario.model';
 import { UsuarioService } from 'app/entities/usuario/service/usuario.service';
-import { VendaService } from '../service/venda.service';
+import { IItem } from 'app/entities/item/item.model';
+import { ItemService } from 'app/entities/item/service/item.service';
 import { IVenda } from '../venda.model';
+import { VendaService } from '../service/venda.service';
 import { VendaFormService } from './venda-form.service';
 
 import { VendaUpdateComponent } from './venda-update.component';
@@ -19,6 +21,7 @@ describe('Venda Management Update Component', () => {
   let vendaFormService: VendaFormService;
   let vendaService: VendaService;
   let usuarioService: UsuarioService;
+  let itemService: ItemService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -42,6 +45,7 @@ describe('Venda Management Update Component', () => {
     vendaFormService = TestBed.inject(VendaFormService);
     vendaService = TestBed.inject(VendaService);
     usuarioService = TestBed.inject(UsuarioService);
+    itemService = TestBed.inject(ItemService);
 
     comp = fixture.componentInstance;
   });
@@ -69,15 +73,40 @@ describe('Venda Management Update Component', () => {
       expect(comp.usuariosSharedCollection).toEqual(expectedCollection);
     });
 
+    it('should call Item query and add missing value', () => {
+      const venda: IVenda = { id: 27942 };
+      const itens: IItem[] = [{ id: 10228 }];
+      venda.itens = itens;
+
+      const itemCollection: IItem[] = [{ id: 10228 }];
+      jest.spyOn(itemService, 'query').mockReturnValue(of(new HttpResponse({ body: itemCollection })));
+      const additionalItems = [...itens];
+      const expectedCollection: IItem[] = [...additionalItems, ...itemCollection];
+      jest.spyOn(itemService, 'addItemToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ venda });
+      comp.ngOnInit();
+
+      expect(itemService.query).toHaveBeenCalled();
+      expect(itemService.addItemToCollectionIfMissing).toHaveBeenCalledWith(
+        itemCollection,
+        ...additionalItems.map(expect.objectContaining),
+      );
+      expect(comp.itemsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('should update editForm', () => {
       const venda: IVenda = { id: 27942 };
       const usuario: IUsuario = { id: 544 };
       venda.usuario = usuario;
+      const itens: IItem = { id: 10228 };
+      venda.itens = [itens];
 
       activatedRoute.data = of({ venda });
       comp.ngOnInit();
 
       expect(comp.usuariosSharedCollection).toContainEqual(usuario);
+      expect(comp.itemsSharedCollection).toContainEqual(itens);
       expect(comp.venda).toEqual(venda);
     });
   });
@@ -158,6 +187,16 @@ describe('Venda Management Update Component', () => {
         jest.spyOn(usuarioService, 'compareUsuario');
         comp.compareUsuario(entity, entity2);
         expect(usuarioService.compareUsuario).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareItem', () => {
+      it('should forward to itemService', () => {
+        const entity = { id: 10228 };
+        const entity2 = { id: 13382 };
+        jest.spyOn(itemService, 'compareItem');
+        comp.compareItem(entity, entity2);
+        expect(itemService.compareItem).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

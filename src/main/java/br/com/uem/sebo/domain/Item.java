@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Item.
@@ -38,13 +40,13 @@ public class Item implements Serializable {
     @Column(name = "disponibilidade", nullable = false)
     private Boolean disponibilidade;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "itens", "usuario" }, allowSetters = true)
-    private Emprestimo emprestimo;
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "itens")
+    @JsonIgnoreProperties(value = { "usuario", "itens" }, allowSetters = true)
+    private Set<Emprestimo> emprestimos = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "itens", "usuario" }, allowSetters = true)
-    private Venda venda;
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "itens")
+    @JsonIgnoreProperties(value = { "usuario", "itens" }, allowSetters = true)
+    private Set<Venda> vendas = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -126,29 +128,65 @@ public class Item implements Serializable {
         this.disponibilidade = disponibilidade;
     }
 
-    public Emprestimo getEmprestimo() {
-        return this.emprestimo;
+    public Set<Emprestimo> getEmprestimos() {
+        return this.emprestimos;
     }
 
-    public void setEmprestimo(Emprestimo emprestimo) {
-        this.emprestimo = emprestimo;
+    public void setEmprestimos(Set<Emprestimo> emprestimos) {
+        if (this.emprestimos != null) {
+            this.emprestimos.forEach(i -> i.removeItens(this));
+        }
+        if (emprestimos != null) {
+            emprestimos.forEach(i -> i.addItens(this));
+        }
+        this.emprestimos = emprestimos;
     }
 
-    public Item emprestimo(Emprestimo emprestimo) {
-        this.setEmprestimo(emprestimo);
+    public Item emprestimos(Set<Emprestimo> emprestimos) {
+        this.setEmprestimos(emprestimos);
         return this;
     }
 
-    public Venda getVenda() {
-        return this.venda;
+    public Item addEmprestimo(Emprestimo emprestimo) {
+        this.emprestimos.add(emprestimo);
+        emprestimo.getItens().add(this);
+        return this;
     }
 
-    public void setVenda(Venda venda) {
-        this.venda = venda;
+    public Item removeEmprestimo(Emprestimo emprestimo) {
+        this.emprestimos.remove(emprestimo);
+        emprestimo.getItens().remove(this);
+        return this;
     }
 
-    public Item venda(Venda venda) {
-        this.setVenda(venda);
+    public Set<Venda> getVendas() {
+        return this.vendas;
+    }
+
+    public void setVendas(Set<Venda> vendas) {
+        if (this.vendas != null) {
+            this.vendas.forEach(i -> i.removeItens(this));
+        }
+        if (vendas != null) {
+            vendas.forEach(i -> i.addItens(this));
+        }
+        this.vendas = vendas;
+    }
+
+    public Item vendas(Set<Venda> vendas) {
+        this.setVendas(vendas);
+        return this;
+    }
+
+    public Item addVenda(Venda venda) {
+        this.vendas.add(venda);
+        venda.getItens().add(this);
+        return this;
+    }
+
+    public Item removeVenda(Venda venda) {
+        this.vendas.remove(venda);
+        venda.getItens().remove(this);
         return this;
     }
 

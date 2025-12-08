@@ -122,6 +122,23 @@
             }
           </select>
         </div>
+
+        <div class="mb-3">
+          <label for="field_itens">Itens</label>
+          <select
+            class="form-control"
+            id="field_itens"
+            data-cy="itens"
+            multiple
+            name="itens"
+            formControlName="itens"
+            [compareWith]="compareItem"
+          >
+            @for (itemOption of itemsSharedCollection; track $index) {
+              <option [ngValue]="itemOption">{{ itemOption.id }}</option>
+            }
+          </select>
+        </div>
       </div>
 
       <div>

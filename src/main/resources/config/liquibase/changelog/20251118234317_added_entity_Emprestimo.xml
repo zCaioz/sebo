@@ -33,6 +33,20 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="20251118234317-1-relations" author="jhipster">
+
+        <createTable tableName="rel_emprestimo__itens">
+            <column name="itens_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="emprestimo_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="emprestimo_id, itens_id" tableName="rel_emprestimo__itens"/>
+    </changeSet>
+
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
     <!--

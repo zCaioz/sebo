@@ -27,28 +27,6 @@ class VendaTest {
     }
 
     @Test
-    void itensTest() {
-        Venda venda = getVendaRandomSampleGenerator();
-        Item itemBack = getItemRandomSampleGenerator();
-
-        venda.addItens(itemBack);
-        assertThat(venda.getItens()).containsOnly(itemBack);
-        assertThat(itemBack.getVenda()).isEqualTo(venda);
-
-        venda.removeItens(itemBack);
-        assertThat(venda.getItens()).doesNotContain(itemBack);
-        assertThat(itemBack.getVenda()).isNull();
-
-        venda.itens(new HashSet<>(Set.of(itemBack)));
-        assertThat(venda.getItens()).containsOnly(itemBack);
-        assertThat(itemBack.getVenda()).isEqualTo(venda);
-
-        venda.setItens(new HashSet<>());
-        assertThat(venda.getItens()).doesNotContain(itemBack);
-        assertThat(itemBack.getVenda()).isNull();
-    }
-
-    @Test
     void usuarioTest() {
         Venda venda = getVendaRandomSampleGenerator();
         Usuario usuarioBack = getUsuarioRandomSampleGenerator();
@@ -58,5 +36,23 @@ class VendaTest {
 
         venda.usuario(null);
         assertThat(venda.getUsuario()).isNull();
+    }
+
+    @Test
+    void itensTest() {
+        Venda venda = getVendaRandomSampleGenerator();
+        Item itemBack = getItemRandomSampleGenerator();
+
+        venda.addItens(itemBack);
+        assertThat(venda.getItens()).containsOnly(itemBack);
+
+        venda.removeItens(itemBack);
+        assertThat(venda.getItens()).doesNotContain(itemBack);
+
+        venda.itens(new HashSet<>(Set.of(itemBack)));
+        assertThat(venda.getItens()).containsOnly(itemBack);
+
+        venda.setItens(new HashSet<>());
+        assertThat(venda.getItens()).doesNotContain(itemBack);
     }
 }

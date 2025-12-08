@@ -9,6 +9,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IUsuario } from 'app/entities/usuario/usuario.model';
 import { UsuarioService } from 'app/entities/usuario/service/usuario.service';
+import { IItem } from 'app/entities/item/item.model';
+import { ItemService } from 'app/entities/item/service/item.service';
 import { StatusEmprestimo } from 'app/entities/enumerations/status-emprestimo.model';
 import { EmprestimoService } from '../service/emprestimo.service';
 import { IEmprestimo } from '../emprestimo.model';
@@ -25,16 +27,20 @@ export class EmprestimoUpdateComponent implements OnInit {
   statusEmprestimoValues = Object.keys(StatusEmprestimo);
 
   usuariosSharedCollection: IUsuario[] = [];
+  itemsSharedCollection: IItem[] = [];
 
   protected emprestimoService = inject(EmprestimoService);
   protected emprestimoFormService = inject(EmprestimoFormService);
   protected usuarioService = inject(UsuarioService);
+  protected itemService = inject(ItemService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: EmprestimoFormGroup = this.emprestimoFormService.createEmprestimoFormGroup();
 
   compareUsuario = (o1: IUsuario | null, o2: IUsuario | null): boolean => this.usuarioService.compareUsuario(o1, o2);
+
+  compareItem = (o1: IItem | null, o2: IItem | null): boolean => this.itemService.compareItem(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ emprestimo }) => {
@@ -88,6 +94,10 @@ export class EmprestimoUpdateComponent implements OnInit {
       this.usuariosSharedCollection,
       emprestimo.usuario,
     );
+    this.itemsSharedCollection = this.itemService.addItemToCollectionIfMissing<IItem>(
+      this.itemsSharedCollection,
+      ...(emprestimo.itens ?? []),
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -98,5 +108,11 @@ export class EmprestimoUpdateComponent implements OnInit {
         map((usuarios: IUsuario[]) => this.usuarioService.addUsuarioToCollectionIfMissing<IUsuario>(usuarios, this.emprestimo?.usuario)),
       )
       .subscribe((usuarios: IUsuario[]) => (this.usuariosSharedCollection = usuarios));
+
+    this.itemService
+      .query()
+      .pipe(map((res: HttpResponse<IItem[]>) => res.body ?? []))
+      .pipe(map((items: IItem[]) => this.itemService.addItemToCollectionIfMissing<IItem>(items, ...(this.emprestimo?.itens ?? []))))
+      .subscribe((items: IItem[]) => (this.itemsSharedCollection = items));
   }
 }

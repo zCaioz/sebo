@@ -61,6 +61,7 @@ public class VendaAsserts {
     public static void assertVendaUpdatableRelationshipsEquals(Venda expected, Venda actual) {
         assertThat(actual)
             .as("Verify Venda relationships")
-            .satisfies(a -> assertThat(a.getUsuario()).as("check usuario").isEqualTo(expected.getUsuario()));
+            .satisfies(a -> assertThat(a.getUsuario()).as("check usuario").isEqualTo(expected.getUsuario()))
+            .satisfies(a -> assertThat(a.getItens()).as("check itens").isEqualTo(expected.getItens()));
     }
 }

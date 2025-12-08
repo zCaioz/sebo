@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type ItemFormGroupInput = IItem | PartialWithRequiredKeyOf<NewItem>;
 
-type ItemFormDefaults = Pick<NewItem, 'id' | 'disponibilidade'>;
+type ItemFormDefaults = Pick<NewItem, 'id' | 'disponibilidade' | 'emprestimos' | 'vendas'>;
 
 type ItemFormGroupContent = {
   id: FormControl<IItem['id'] | NewItem['id']>;
@@ -23,8 +23,8 @@ type ItemFormGroupContent = {
   genero: FormControl<IItem['genero']>;
   autorArtista: FormControl<IItem['autorArtista']>;
   disponibilidade: FormControl<IItem['disponibilidade']>;
-  emprestimo: FormControl<IItem['emprestimo']>;
-  venda: FormControl<IItem['venda']>;
+  emprestimos: FormControl<IItem['emprestimos']>;
+  vendas: FormControl<IItem['vendas']>;
 };
 
 export type ItemFormGroup = FormGroup<ItemFormGroupContent>;
@@ -53,8 +53,8 @@ export class ItemFormService {
       disponibilidade: new FormControl(itemRawValue.disponibilidade, {
         validators: [Validators.required],
       }),
-      emprestimo: new FormControl(itemRawValue.emprestimo),
-      venda: new FormControl(itemRawValue.venda),
+      emprestimos: new FormControl(itemRawValue.emprestimos ?? []),
+      vendas: new FormControl(itemRawValue.vendas ?? []),
     });
   }
 
@@ -76,6 +76,8 @@ export class ItemFormService {
     return {
       id: null,
       disponibilidade: false,
+      emprestimos: [],
+      vendas: [],
     };
   }
 }

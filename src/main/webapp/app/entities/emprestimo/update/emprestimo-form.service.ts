@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type EmprestimoFormGroupInput = IEmprestimo | PartialWithRequiredKeyOf<NewEmprestimo>;
 
-type EmprestimoFormDefaults = Pick<NewEmprestimo, 'id'>;
+type EmprestimoFormDefaults = Pick<NewEmprestimo, 'id' | 'itens'>;
 
 type EmprestimoFormGroupContent = {
   id: FormControl<IEmprestimo['id'] | NewEmprestimo['id']>;
@@ -23,6 +23,7 @@ type EmprestimoFormGroupContent = {
   dataDevolucao: FormControl<IEmprestimo['dataDevolucao']>;
   status: FormControl<IEmprestimo['status']>;
   usuario: FormControl<IEmprestimo['usuario']>;
+  itens: FormControl<IEmprestimo['itens']>;
 };
 
 export type EmprestimoFormGroup = FormGroup<EmprestimoFormGroupContent>;
@@ -53,6 +54,7 @@ export class EmprestimoFormService {
         validators: [Validators.required],
       }),
       usuario: new FormControl(emprestimoRawValue.usuario),
+      itens: new FormControl(emprestimoRawValue.itens ?? []),
     });
   }
 
@@ -73,6 +75,7 @@ export class EmprestimoFormService {
   private getFormDefaults(): EmprestimoFormDefaults {
     return {
       id: null,
+      itens: [],
     };
   }
 }
