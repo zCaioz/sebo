@@ -1,15 +1,21 @@
 package br.com.uem.sebo.web.rest;
 
 import br.com.uem.sebo.domain.Emprestimo;
+import br.com.uem.sebo.domain.Item;
+import br.com.uem.sebo.domain.enumeration.StatusEmprestimo;
 import br.com.uem.sebo.repository.EmprestimoRepository;
+import br.com.uem.sebo.repository.ItemRepository;
 import br.com.uem.sebo.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,16 +41,20 @@ public class EmprestimoResource {
     private String applicationName;
 
     private final EmprestimoRepository emprestimoRepository;
+    private final ItemRepository itemRepository;
 
-    public EmprestimoResource(EmprestimoRepository emprestimoRepository) {
+    public EmprestimoResource(EmprestimoRepository emprestimoRepository, ItemRepository itemRepository) {
         this.emprestimoRepository = emprestimoRepository;
+        this.itemRepository = itemRepository;
     }
 
     /**
      * {@code POST  /emprestimos} : Create a new emprestimo.
      *
      * @param emprestimo the emprestimo to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new emprestimo, or with status {@code 400 (Bad Request)} if the emprestimo has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new emprestimo, or with status {@code 400 (Bad Request)} if
+     *         the emprestimo has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
@@ -53,6 +63,30 @@ public class EmprestimoResource {
         if (emprestimo.getId() != null) {
             throw new BadRequestAlertException("A new emprestimo cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        if (emprestimo.getStatus() == null) {
+            throw new BadRequestAlertException("Status não pode ser null", ENTITY_NAME, "statusNull");
+        }
+
+        if (emprestimo.getStatus() != StatusEmprestimo.DEVOLVIDO) {
+            List<Item> itensPersistidos = emprestimo
+                .getItens()
+                .stream()
+                .map(i ->
+                    itemRepository
+                        .findById(i.getId())
+                        .orElseThrow(() -> new BadRequestAlertException("Item não encontrado", ENTITY_NAME, "itemnotfound"))
+                )
+                .toList();
+
+            itensPersistidos.forEach(item -> {
+                item.setDisponibilidade(false);
+                itemRepository.save(item);
+            });
+
+            emprestimo.setItens(new HashSet<>(itensPersistidos));
+        }
+
         emprestimo = emprestimoRepository.save(emprestimo);
         return ResponseEntity.created(new URI("/api/emprestimos/" + emprestimo.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, emprestimo.getId().toString()))
@@ -62,45 +96,87 @@ public class EmprestimoResource {
     /**
      * {@code PUT  /emprestimos/:id} : Updates an existing emprestimo.
      *
-     * @param id the id of the emprestimo to save.
+     * @param id         the id of the emprestimo to save.
      * @param emprestimo the emprestimo to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated emprestimo,
-     * or with status {@code 400 (Bad Request)} if the emprestimo is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the emprestimo couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated emprestimo,
+     *         or with status {@code 400 (Bad Request)} if the emprestimo is not
+     *         valid,
+     *         or with status {@code 500 (Internal Server Error)} if the emprestimo
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Emprestimo> updateEmprestimo(
-        @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Emprestimo emprestimo
-    ) throws URISyntaxException {
-        LOG.debug("REST request to update Emprestimo : {}, {}", id, emprestimo);
-        if (emprestimo.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, emprestimo.getId())) {
+    @Transactional
+    public ResponseEntity<Emprestimo> updateEmprestimo(@PathVariable Long id, @Valid @RequestBody Emprestimo emprestimoAtualizado)
+        throws URISyntaxException {
+        LOG.debug("REST request to update Emprestimo : {}, {}", id, emprestimoAtualizado);
+
+        if (emprestimoAtualizado.getId() == null || !id.equals(emprestimoAtualizado.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!emprestimoRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        Emprestimo emprestimoOriginal = emprestimoRepository
+            .findById(id)
+            .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+
+        StatusEmprestimo statusAnterior = emprestimoOriginal.getStatus();
+        StatusEmprestimo statusNovo = emprestimoAtualizado.getStatus();
+
+        Set<Item> itensOriginais = emprestimoOriginal.getItens();
+        Set<Item> itensNovos = emprestimoAtualizado.getItens();
+
+        if (statusNovo == StatusEmprestimo.DEVOLVIDO && statusAnterior != StatusEmprestimo.DEVOLVIDO) {
+            itensOriginais.forEach(item -> item.setDisponibilidade(true));
         }
 
-        emprestimo = emprestimoRepository.save(emprestimo);
+        if (statusNovo == StatusEmprestimo.EM_ANDAMENTO) {
+            for (Item novoItem : itensNovos) {
+                Item itemPersistido = itemRepository
+                    .findById(novoItem.getId())
+                    .orElseThrow(() -> new BadRequestAlertException("Item não encontrado", ENTITY_NAME, "itemnotfound"));
+
+                if (!itemPersistido.getDisponibilidade()) {
+                    throw new BadRequestAlertException("Item indisponível: " + itemPersistido.getId(), ENTITY_NAME, "itemUnavailable");
+                }
+
+                itemPersistido.setDisponibilidade(false);
+            }
+        }
+
+        Set<Long> novosIds = itensNovos.stream().map(Item::getId).collect(Collectors.toSet());
+        for (Item itemOriginal : itensOriginais) {
+            if (!novosIds.contains(itemOriginal.getId())) {
+                itemOriginal.setDisponibilidade(true);
+            }
+        }
+
+        emprestimoOriginal.setStatus(statusNovo);
+        emprestimoOriginal.setItens(
+            itensNovos.stream().map(i -> itemRepository.findById(i.getId()).orElseThrow()).collect(Collectors.toSet())
+        );
+
+        Emprestimo result = emprestimoRepository.save(emprestimoOriginal);
+
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, emprestimo.getId().toString()))
-            .body(emprestimo);
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id.toString()))
+            .body(result);
     }
 
     /**
-     * {@code PATCH  /emprestimos/:id} : Partial updates given fields of an existing emprestimo, field will ignore if it is null
+     * {@code PATCH  /emprestimos/:id} : Partial updates given fields of an existing
+     * emprestimo, field will ignore if it is null
      *
-     * @param id the id of the emprestimo to save.
+     * @param id         the id of the emprestimo to save.
      * @param emprestimo the emprestimo to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated emprestimo,
-     * or with status {@code 400 (Bad Request)} if the emprestimo is not valid,
-     * or with status {@code 404 (Not Found)} if the emprestimo is not found,
-     * or with status {@code 500 (Internal Server Error)} if the emprestimo couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated emprestimo,
+     *         or with status {@code 400 (Bad Request)} if the emprestimo is not
+     *         valid,
+     *         or with status {@code 404 (Not Found)} if the emprestimo is not
+     *         found,
+     *         or with status {@code 500 (Internal Server Error)} if the emprestimo
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -149,8 +225,10 @@ public class EmprestimoResource {
     /**
      * {@code GET  /emprestimos} : get all the emprestimos.
      *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of emprestimos in body.
+     * @param eagerload flag to eager load entities from relationships (This is
+     *                  applicable for many-to-many).
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of emprestimos in body.
      */
     @GetMapping("")
     public List<Emprestimo> getAllEmprestimos(
@@ -168,7 +246,8 @@ public class EmprestimoResource {
      * {@code GET  /emprestimos/:id} : get the "id" emprestimo.
      *
      * @param id the id of the emprestimo to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the emprestimo, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the emprestimo, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     public ResponseEntity<Emprestimo> getEmprestimo(@PathVariable("id") Long id) {

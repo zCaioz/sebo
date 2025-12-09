@@ -1,12 +1,15 @@
 package br.com.uem.sebo.web.rest;
 
+import br.com.uem.sebo.domain.Item;
 import br.com.uem.sebo.domain.Venda;
+import br.com.uem.sebo.repository.ItemRepository;
 import br.com.uem.sebo.repository.VendaRepository;
 import br.com.uem.sebo.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,16 +38,20 @@ public class VendaResource {
     private String applicationName;
 
     private final VendaRepository vendaRepository;
+    private final ItemRepository itemRepository;
 
-    public VendaResource(VendaRepository vendaRepository) {
+    public VendaResource(VendaRepository vendaRepository, ItemRepository itemRepository) {
         this.vendaRepository = vendaRepository;
+        this.itemRepository = itemRepository;
     }
 
     /**
      * {@code POST  /vendas} : Create a new venda.
      *
      * @param venda the venda to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new venda, or with status {@code 400 (Bad Request)} if the venda has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new venda, or with status {@code 400 (Bad Request)} if the
+     *         venda has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
@@ -53,6 +60,24 @@ public class VendaResource {
         if (venda.getId() != null) {
             throw new BadRequestAlertException("A new venda cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        List<Item> itensPersistidos = venda
+            .getItens()
+            .stream()
+            .map(i ->
+                itemRepository
+                    .findById(i.getId())
+                    .orElseThrow(() -> new BadRequestAlertException("Item não encontrado", ENTITY_NAME, "itemnotfound"))
+            )
+            .toList();
+
+        itensPersistidos.forEach(item -> {
+            item.setDisponibilidade(false);
+            itemRepository.save(item);
+        });
+
+        venda.setItens(new HashSet<>(itensPersistidos));
+
         venda = vendaRepository.save(venda);
         return ResponseEntity.created(new URI("/api/vendas/" + venda.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, venda.getId().toString()))
@@ -62,11 +87,13 @@ public class VendaResource {
     /**
      * {@code PUT  /vendas/:id} : Updates an existing venda.
      *
-     * @param id the id of the venda to save.
+     * @param id    the id of the venda to save.
      * @param venda the venda to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated venda,
-     * or with status {@code 400 (Bad Request)} if the venda is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the venda couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated venda,
+     *         or with status {@code 400 (Bad Request)} if the venda is not valid,
+     *         or with status {@code 500 (Internal Server Error)} if the venda
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
@@ -91,14 +118,17 @@ public class VendaResource {
     }
 
     /**
-     * {@code PATCH  /vendas/:id} : Partial updates given fields of an existing venda, field will ignore if it is null
+     * {@code PATCH  /vendas/:id} : Partial updates given fields of an existing
+     * venda, field will ignore if it is null
      *
-     * @param id the id of the venda to save.
+     * @param id    the id of the venda to save.
      * @param venda the venda to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated venda,
-     * or with status {@code 400 (Bad Request)} if the venda is not valid,
-     * or with status {@code 404 (Not Found)} if the venda is not found,
-     * or with status {@code 500 (Internal Server Error)} if the venda couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated venda,
+     *         or with status {@code 400 (Bad Request)} if the venda is not valid,
+     *         or with status {@code 404 (Not Found)} if the venda is not found,
+     *         or with status {@code 500 (Internal Server Error)} if the venda
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -141,8 +171,10 @@ public class VendaResource {
     /**
      * {@code GET  /vendas} : get all the vendas.
      *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of vendas in body.
+     * @param eagerload flag to eager load entities from relationships (This is
+     *                  applicable for many-to-many).
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of vendas in body.
      */
     @GetMapping("")
     public List<Venda> getAllVendas(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
@@ -158,7 +190,8 @@ public class VendaResource {
      * {@code GET  /vendas/:id} : get the "id" venda.
      *
      * @param id the id of the venda to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the venda, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the venda, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     public ResponseEntity<Venda> getVenda(@PathVariable("id") Long id) {
