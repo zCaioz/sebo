@@ -73,3 +73,5 @@ Para roda a aplicação:
 A aplicação iniciará em:
 
 http://localhost:8080
+
+![Diagrama de Classes](diagrama.png)
